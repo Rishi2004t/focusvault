@@ -1,0 +1,178 @@
+import express from 'express';
+import Code from '../models/Code.js';
+import { authMiddleware } from '../middleware/auth.js';
+
+const router = express.Router();
+
+/**
+ * @desc Quick Save code snippet from IDE
+ * @route POST /api/code/save
+ */
+router.post('/save', authMiddleware, async (req, res) => {
+  const { fileName, content, language, teamId, projectId } = req.body;
+  try {
+    const newCode = new Code({
+      title: fileName,
+      code: content,
+      language,
+      teamId,
+      projectId,
+      ownerId: req.userId
+    });
+    await newCode.save();
+    res.status(200).json({ message: "Code stored in MongoDB", data: newCode });
+  } catch (err) {
+    console.error("Save failed:", err);
+    res.status(500).json({ error: "Database Sync Failed" });
+  }
+});
+
+import axios from 'axios';
+
+/**
+ * @desc Code execution via Wandbox (confirmed reachable) → Local sim fallback
+ * @route POST /api/code/run
+ */
+router.post('/run', authMiddleware, async (req, res) => {
+  const { language, files, stdin } = req.body;
+  const code = files?.[0]?.content || '';
+
+  // ── Wandbox compiler map (all confirmed working) ──────────────────────────
+  const wandboxMap = {
+    python:     { compiler: 'cpython-3.12.0',  lang: 'Python 3.12'  },
+    cpp:        { compiler: 'gcc-head',         lang: 'GCC (C++)'    },
+    java:       { compiler: 'openjdk-head',     lang: 'OpenJDK'      },
+    javascript: { compiler: 'nodejs-head',      lang: 'Node.js'      },
+    typescript: { compiler: 'typescript-5.0.4', lang: 'TypeScript'   },
+    c:          { compiler: 'gcc-head-c',       lang: 'GCC (C)'      },
+  };
+
+  const wb = wandboxMap[language];
+
+  // ── Primary: Wandbox ──────────────────────────────────────────────────────
+  if (wb) {
+    try {
+      console.log(`🌐 Executing via Wandbox: ${wb.lang}`);
+      const response = await axios.post('https://wandbox.org/api/compile.json', {
+        code,
+        compiler: wb.compiler,
+        stdin: stdin || '',
+        options: '',
+      }, { timeout: 20000 });
+
+      const d = response.data;
+      return res.json({
+        run: {
+          stdout: d.program_output || d.compiler_output || '',
+          stderr: d.program_error  || d.compiler_error  || '',
+          code:   parseInt(d.status ?? '0', 10),
+          source: 'cloud'
+        },
+        statusMessage: `Executed via Wandbox — ${wb.lang}`
+      });
+    } catch (err) {
+      console.warn('⚠️ Wandbox failed:', err.message);
+    }
+  }
+
+  // ── Fallback: Local simulation (Python / JavaScript simple patterns) ──────
+  const simulation = { stdout: '', stderr: '', code: 0, source: 'local_simulation' };
+  if (language === 'python' || language === 'javascript') {
+    const inputBuffer = (stdin || '').split(/\s+/);
+    const printRegex = /(?:print|console\.log)\s*\(\s*(['"])(.*?)\1\s*\)/g;
+    let match;
+    while ((match = printRegex.exec(code)) !== null) simulation.stdout += match[2] + '\n';
+    if (code.includes('input(') && inputBuffer.length > 0)
+      simulation.stdout += `\n[Virtual] Simulated input "${inputBuffer[0]}" accepted.\n`;
+    if (!simulation.stdout) simulation.stdout = 'Process finished (exit code 0)';
+    return res.json({
+      run: simulation,
+      statusMessage: 'Cloud offline — Running in Virtual Simulation Mode'
+    });
+  }
+
+  // ── All failed ────────────────────────────────────────────────────────────
+  return res.status(503).json({
+    error: 'All execution engines unavailable',
+    details: `No engine could run ${language}. The browser will try direct execution.`,
+  });
+});
+
+/**
+ * @desc Get all code snippets for the logged-in user
+ * @route GET /api/code
+ */
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const codes = await Code.find({ ownerId: req.userId }).sort({ updatedAt: -1 });
+    res.json(codes);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving code documents' });
+  }
+});
+
+/**
+ * @desc Create a new code snippet
+ * @route POST /api/code
+ */
+router.post('/', authMiddleware, async (req, res) => {
+  try {
+    const { title, code, language, teamId, projectId } = req.body;
+    
+    const newCode = new Code({
+      title,
+      code,
+      language,
+      teamId,
+      projectId,
+      ownerId: req.userId,
+    });
+    
+    await newCode.save();
+    res.status(201).json(newCode);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to create code document' });
+  }
+});
+
+/**
+ * @desc Update a code snippet
+ * @route PUT /api/code/:id
+ */
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const { title, code, language } = req.body;
+    
+    const updatedCode = await Code.findOneAndUpdate(
+      { _id: req.params.id, ownerId: req.userId },
+      { title, code, language },
+      { new: true }
+    );
+    
+    if (!updatedCode) {
+      return res.status(404).json({ message: 'Code document not found or unauthorized' });
+    }
+    
+    res.json(updatedCode);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update code document' });
+  }
+});
+
+/**
+ * @desc Delete a code snippet
+ * @route DELETE /api/code/:id
+ */
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const deletedCode = await Code.findOneAndDelete({ _id: req.params.id, ownerId: req.userId });
+    if (!deletedCode) {
+      return res.status(404).json({ message: 'Code document not found or unauthorized' });
+    }
+    res.json({ message: 'Code deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete code document' });
+  }
+});
+
+export default router;
