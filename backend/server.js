@@ -110,7 +110,40 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Health Check Route
 app.get('/api/health', (req, res) => {
-  res.json({ message: '✅ Server is running', timestamp: new Date() });
+  res.json({ 
+    message: '✅ Neural Core: Online', 
+    timestamp: new Date().toISOString(),
+    version: '2.0.debug' 
+  });
+});
+
+// 🧪 EMERGENCY TEST ROUTE (Direct)
+app.get('/api/test-push', authMiddleware, async (req, res) => {
+  try {
+    const Subscription = (await import('./models/Subscription.js')).default;
+    const webpush = (await import('web-push')).default;
+    
+    const subscriptions = await Subscription.find({ userId: req.userId });
+    
+    if (subscriptions.length === 0) {
+      return res.status(404).json({ message: 'No subscriptions found in database. Click "Enable Neural Sync" in matching browser.' });
+    }
+
+    const payload = JSON.stringify({
+      title: '🚨 Focus Vault: Direct Signal',
+      body: 'Diagnostics complete. Background connection is LIVE.',
+      icon: '/icons/icon-192x192.png',
+      data: { url: '/tasks' }
+    });
+
+    for (const sub of subscriptions) {
+      await webpush.sendNotification(sub, payload);
+    }
+
+    res.json({ status: 'Success', sentTo: subscriptions.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // API Routes
