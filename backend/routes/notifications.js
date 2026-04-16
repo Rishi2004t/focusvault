@@ -28,6 +28,45 @@ router.post('/subscribe', authMiddleware, async (req, res) => {
   }
 });
 
+// 🧪 DIAGNOSTIC ROUTE: Trigger a test push notification immediately
+router.get('/test-push', authMiddleware, async (req, res) => {
+  try {
+    const webpush = (await import('web-push')).default;
+    const Subscription = (await import('../models/Subscription.js')).default;
+    
+    const subscriptions = await Subscription.find({ userId: req.userId });
+    
+    if (subscriptions.length === 0) {
+      return res.status(404).json({ message: 'No push subscriptions found for this user. Click Enable Neural Sync first.' });
+    }
+
+    const payload = JSON.stringify({
+      title: '🧪 Focus Vault: Test Signal',
+      body: 'If you see this, background notifications are working perfectly!',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/badge-72x72.png',
+      data: { url: '/tasks' }
+    });
+
+    let successCount = 0;
+    for (const sub of subscriptions) {
+      try {
+        await webpush.sendNotification(sub, payload);
+        successCount++;
+      } catch (err) {
+        console.error('❌ Test Push failed:', err);
+      }
+    }
+
+    res.json({ 
+      message: `Test signal broadcasted to ${successCount} terminals.`,
+      foundSubscriptions: subscriptions.length 
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Get all notifications for user
 router.get('/', authMiddleware, async (req, res) => {
   try {
