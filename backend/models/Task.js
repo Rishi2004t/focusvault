@@ -64,9 +64,13 @@ const taskSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    notified: {
-      type: Boolean,
-      default: false,
+    reminderStage: {
+      type: Number,
+      default: 0,
+      // 0 = no reminder sent
+      // 1 = early warning (2 min before)
+      // 2 = due now
+      // 3 = overdue (1 min after)
     },
   },
   { timestamps: true }
