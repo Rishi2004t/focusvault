@@ -51,6 +51,22 @@ if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
 
 const app = express();
 
+// ✅ CORS must be FIRST — before helmet, body parser, passport
+// This ensures Socket.io polling preflight OPTIONS requests are handled correctly
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://focusvault-khaki.vercel.app',
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// Handle preflight requests for all routes
+app.options('*', cors());
+
 // Security Middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -75,17 +91,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'downloads/uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(passport.initialize());
-
-// CORS setup with multiple origin support
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://focusvault-khaki.vercel.app"
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 // Root Health Check Route
 app.get('/', (req, res) => {
