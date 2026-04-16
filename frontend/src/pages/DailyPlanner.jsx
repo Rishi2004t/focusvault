@@ -18,12 +18,14 @@ import { format, isToday, isTomorrow, isPast } from 'date-fns';
 import { toast } from 'react-hot-toast';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../hooks/useNotifications';
 import MainLayout from '../components/MainLayout';
 import PlannerTaskCard from '../components/planner/PlannerTaskCard';
 import AnimatedCounter from '../components/shared/AnimatedCounter';
 
 export default function DailyPlanner() {
-  const { user, fetchUserProfile } = useAuth();
+  const { isAuthenticated, user, fetchUserProfile } = useAuth();
+  const { registerNeuralSync } = useNotifications(isAuthenticated);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('today'); // today, tomorrow, history
@@ -39,17 +41,12 @@ export default function DailyPlanner() {
 
   const handleEnableSync = async () => {
     try {
-      if (Notification.permission === 'default') {
-        const granted = await Notification.requestPermission();
-        if (granted === 'granted') {
-          setNotificationsEnabled(true);
-          toast.success('Neural Link Synchronized');
-        }
-      } else if (Notification.permission === 'granted') {
+      const success = await registerNeuralSync();
+      if (success) {
         setNotificationsEnabled(true);
-        toast.success('Neural Link already synchronized');
+        toast.success('Neural Link Synchronized');
       } else {
-        toast.error('Neural Link blocked by browser');
+        toast.error('Sync Protocol Failure');
       }
     } catch (err) {
       toast.error('Sync Protocol Failure');
@@ -149,6 +146,8 @@ export default function DailyPlanner() {
     if (activeTab === 'history') return task.completed || isPast(date);
     return false;
   });
+
+  const overdueTasks = tasks.filter(t => !t.completed && t.dueDate && new Date(t.dueDate) < new Date());
 
   const completedToday = tasks.filter(t => isToday(new Date(t.dueDate || t.updatedAt)) && t.completed).length;
   const totalToday = tasks.filter(t => isToday(new Date(t.dueDate || t.createdAt))).length;
@@ -347,9 +346,17 @@ export default function DailyPlanner() {
           {/* ── MISSIONS BOARD ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 content-start">
              <div>
-                <div className="flex items-center gap-3 mb-6">
-                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Current Loadout ({filteredTasks.filter(t => !t.completed).length})</h3>
+                <div className="flex items-center justify-between mb-6">
+                   <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-indigo-500" />
+                      <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Current Loadout ({filteredTasks.filter(t => !t.completed).length})</h3>
+                   </div>
+                   {overdueTasks.length > 0 && (
+                     <div className="px-3 py-1 rounded-full bg-rose-50 text-rose-500 text-[9px] font-black uppercase tracking-widest border border-rose-100 flex items-center gap-2">
+                        <Clock size={12} className="animate-bounce" />
+                        {overdueTasks.length} Overdue Mission{overdueTasks.length > 1 ? 's' : ''}
+                     </div>
+                   )}
                 </div>
                 
                 <div className="space-y-4">

@@ -36,6 +36,7 @@ import codeRoutes from './routes/code.js';
 import searchRoutes from './routes/search.js';
 import aiRoutes from './routes/ai.js';
 import soulRoutes from './routes/soul.js';
+import notificationRoutes from './routes/notifications.js';
 // Initialize Web Push with Neural Keys
 if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
   console.warn('⚠️ Web Push keys missing in shell environment. Neural sync may be limited.');
@@ -121,6 +122,7 @@ app.use('/api/code', codeRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/soul', soulRoutes);
+app.use('/api/notifications', notificationRoutes);
 // Web Push Subscription Route
 app.post('/api/notifications/subscribe', authMiddleware, async (req, res) => {
   try {

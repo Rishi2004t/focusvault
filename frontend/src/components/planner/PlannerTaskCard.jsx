@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 
 export default function PlannerTaskCard({ task, onToggle, onDelete }) {
   const isCompleted = task.completed;
+  const isOverdue = !isCompleted && task.dueDate && new Date(task.dueDate) < new Date();
   
   const priorityColors = {
     high: 'text-rose-500 bg-rose-50 border-rose-100',
@@ -22,9 +23,16 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
       className={`group relative p-5 rounded-[2rem] border transition-all duration-300 ${
         isCompleted 
           ? 'bg-slate-50/50 border-slate-100 opacity-70' 
+          : isOverdue
+          ? 'bg-rose-50/30 border-rose-200 shadow-lg shadow-rose-500/5'
           : 'bg-white border-slate-200/60 shadow-sm shadow-slate-200/50 hover:shadow-xl hover:shadow-indigo-500/5 hover:border-indigo-100'
       }`}
     >
+      {isOverdue && (
+        <div className="absolute top-4 right-10 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500 text-white text-[8px] font-black uppercase tracking-widest animate-pulse z-10">
+          Overdue Mission
+        </div>
+      )}
       <div className="flex items-start gap-4">
         {/* Custom Animated Checkbox */}
         <button
@@ -63,7 +71,7 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
           
           <div className="flex items-center justify-between gap-4 mb-1">
             <h4 className={`text-sm font-bold tracking-tight transition-all duration-300 ${
-              isCompleted ? 'text-slate-400 line-through' : 'text-slate-900 group-hover:text-indigo-600'
+              isCompleted ? 'text-slate-400 line-through' : isOverdue ? 'text-rose-900 font-black' : 'text-slate-900 group-hover:text-indigo-600'
             }`}>
               {task.title}
             </h4>
@@ -83,8 +91,12 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
 
           <div className="flex items-center gap-3 mt-3">
              {task.dueDate && !isCompleted && (
-               <div className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 lowercase bg-indigo-50/50 px-2 py-0.5 rounded-md border border-indigo-100/50">
-                 <Clock size={12} className="animate-pulse" />
+               <div className={`flex items-center gap-1.5 text-[10px] font-black lowercase px-2 py-0.5 rounded-md border ${
+                 isOverdue 
+                 ? 'text-rose-600 bg-rose-50 border-rose-100' 
+                 : 'text-indigo-600 bg-indigo-50/50 border-indigo-100/50'
+               }`}>
+                 <Clock size={12} className={isOverdue ? 'animate-bounce' : 'animate-pulse'} />
                  {format(new Date(task.dueDate), 'h:mm a')}
                </div>
              )}
