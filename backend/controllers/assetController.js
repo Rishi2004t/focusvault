@@ -10,6 +10,9 @@ import { recordActivity } from '../utils/logger.js';
  */
 export const uploadAssets = async (req, res) => {
   try {
+    const { noteId } = req.body;
+    console.log(`📡 Incoming Archival Request: ${req.files?.length || 0} nodes. Target Note: ${noteId || 'AUTO-CREATE'}`);
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'No files provided for architectural archival' });
     }
@@ -17,17 +20,30 @@ export const uploadAssets = async (req, res) => {
     const archivedAssets = [];
 
     for (const file of req.files) {
-      let newNote;
+      let linkedNoteId = noteId;
+      let newNote = null;
+
       try {
-        // 1. Auto-create a linked Neural Note
-        newNote = new Note({
-          userId: req.userId,
-          title: `New Asset: ${file.originalname.split('.')[0]}`,
-          content: `Neural Note initialized from resource: ${file.originalname}\nSynced at: ${new Date().toLocaleString()}`,
-          category: 'neural',
-          type: 'blueprint'
-        });
-        await newNote.save();
+        // 1. Resolve Note Linkage
+        if (!linkedNoteId || linkedNoteId === 'undefined' || linkedNoteId === '') {
+          console.log(`   🔸 Auto-creating Neural Note for: ${file.originalname}`);
+          newNote = new Note({
+            userId: req.userId,
+            title: `New Asset: ${file.originalname.split('.')[0]}`,
+            content: `Neural Note initialized from resource: ${file.originalname}\nSynced at: ${new Date().toLocaleString()}`,
+            category: 'neural',
+            type: 'blueprint'
+          });
+          await newNote.save();
+          linkedNoteId = newNote._id;
+        } else {
+          // Verify note exists and belongs to user
+          const existingNote = await Note.findOne({ _id: noteId, userId: req.userId });
+          if (!existingNote) {
+            throw new Error(`Target note ${noteId} not found or access denied.`);
+          }
+          linkedNoteId = existingNote._id;
+        }
 
         // 2. Identify file category
         const fileExt = path.extname(file.originalname).substring(1).toLowerCase();
@@ -37,9 +53,10 @@ export const uploadAssets = async (req, res) => {
         if (['ppt', 'pptx'].includes(fileExt)) fileType = 'ppt';
 
         // 3. Create Asset document with Cloudinary details
+        // Note: Multer-Cloudinary handles the upload before reaching here
         const asset = new Asset({
           userId: req.userId,
-          noteId: newNote._id,
+          noteId: linkedNoteId,
           filename: file.originalname,
           fileType: fileType,
           url: file.path || file.secure_url, 
@@ -48,26 +65,24 @@ export const uploadAssets = async (req, res) => {
           category: 'PDF Documents' // Fallback handled by Schema pre-validate hook
         });
 
-        console.log(`📡 Archiving Neural Node: ${file.originalname} (Vault ID: ${asset.publicId || 'STREAM'})`);
+        console.log(`   ✅ Synced: ${file.originalname} -> Vault ID: ${asset.publicId}`);
         await asset.save();
 
-        // 4. Link mapping back to note
-        newNote.assets.push(asset._id);
-        await newNote.save();
+        // 4. Link mapping back to note (Push to assets array)
+        await Note.findByIdAndUpdate(linkedNoteId, { $push: { assets: asset._id } });
 
         archivedAssets.push({
           assetId: asset._id,
-          noteId: newNote._id,
+          noteId: linkedNoteId,
           filename: asset.filename,
           url: asset.url
         });
       } catch (innerErr) {
-        console.error(`❌ Partial Sync Failure for ${file.originalname}:`, innerErr);
-        // Rollback note if it was created but asset linkage failed
-        if (newNote && newNote._id) {
-          await Note.findByIdAndDelete(newNote._id).catch(e => console.error('Rollback failed:', e));
+        console.error(`❌ Sync Failure (${file.originalname}):`, innerErr.message);
+        // Rollback note if it was auto-created but asset linkage failed
+        if (newNote) {
+          await Note.findByIdAndDelete(newNote._id).catch(() => {});
         }
-        // Continue with next file
       }
     }
 

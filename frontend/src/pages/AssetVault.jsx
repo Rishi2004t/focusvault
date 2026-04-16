@@ -80,6 +80,11 @@ const AssetVault = () => {
     setUploadProgress(0);
     const formData = new FormData();
     files.forEach(file => formData.append('files', file));
+    
+    // Add the target note ID for linkage
+    if (selectedNoteId) {
+      formData.append('noteId', selectedNoteId);
+    }
 
     try {
       await api.post('/upload/multiple', formData, {
@@ -94,7 +99,8 @@ const AssetVault = () => {
       fetchNotes(); // Sync notes list as new ones were created
     } catch (error) {
       console.error('❌ Sync failure detected:', error);
-      toast.error('Sync failure detected during upload');
+      const errorMsg = error.response?.data?.message || error.parsedMessage || 'Sync failure detected during upload';
+      toast.error(errorMsg);
     } finally {
       setUploading(false);
       setUploadProgress(0);
