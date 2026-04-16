@@ -50,8 +50,10 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         setUser(user);
         localStorage.setItem('user', JSON.stringify(user));
-        // Token is handled by HttpOnly cookie, but fallback logic might need it
-        if (token) localStorage.setItem('authToken', token);
+        if (token) {
+          localStorage.setItem('authToken', token);
+          setToken(token);
+        }
       }
       return response.data;
     } catch (error) {
@@ -66,8 +68,10 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = response.data;
       if (user) {
         setUser(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        if (token) localStorage.setItem('authToken', token);
+        if (token) {
+          localStorage.setItem('authToken', token);
+          setToken(token);
+        }
       }
       return response.data;
     } catch (error) {
@@ -92,8 +96,10 @@ export const AuthProvider = ({ children }) => {
       const { user, token: authToken } = response.data;
       if (user) {
         setUser(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        if (authToken) localStorage.setItem('authToken', authToken);
+        if (authToken) {
+          localStorage.setItem('authToken', authToken);
+          setToken(authToken);
+        }
       }
       return response.data;
     } catch (error) {
