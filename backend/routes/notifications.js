@@ -1,8 +1,32 @@
 import express from 'express';
 import Notification from '../models/Notification.js';
+import Subscription from '../models/Subscription.js';
 import { authMiddleware } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Web Push Subscription Route
+router.post('/subscribe', authMiddleware, async (req, res) => {
+  try {
+    const subscription = req.body;
+    
+    // Save or update subscription
+    const sub = await Subscription.findOneAndUpdate(
+      { endpoint: subscription.endpoint },
+      { 
+        userId: req.userId,
+        ...subscription
+      },
+      { upsert: true, new: true }
+    );
+
+    console.log(`✅ Neural Sync established for user: ${req.userId} (Terminal: ${sub._id})`);
+    res.status(201).json({ message: 'Neural Sync Established' });
+  } catch (error) {
+    console.error('❌ Subscription Error:', error);
+    res.status(500).json({ message: 'Failed to establish Neural Sync' });
+  }
+});
 
 // Get all notifications for user
 router.get('/', authMiddleware, async (req, res) => {

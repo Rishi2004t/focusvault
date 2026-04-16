@@ -12,7 +12,6 @@ import { createServer } from 'http';
 import webpush from 'web-push';
 import { initSocket } from './utils/socket.js';
 import { initCronJobs } from './utils/cron.js';
-import Subscription from './models/Subscription.js';
 import { authMiddleware } from './middleware/auth.js';
 
 dotenv.config();
@@ -128,28 +127,6 @@ app.use('/api/search', searchRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/soul', soulRoutes);
 app.use('/api/notifications', notificationRoutes);
-// Web Push Subscription Route
-app.post('/api/notifications/subscribe', authMiddleware, async (req, res) => {
-  try {
-    const subscription = req.body;
-    
-    // Save or update subscription
-    const sub = await Subscription.findOneAndUpdate(
-      { endpoint: subscription.endpoint },
-      { 
-        userId: req.userId,
-        ...subscription
-      },
-      { upsert: true, new: true }
-    );
-
-    console.log(`✅ Neural Sync established for user: ${req.userId} (Terminal: ${sub._id})`);
-    res.status(201).json({ message: 'Neural Sync Established' });
-  } catch (error) {
-    console.error('❌ Subscription Error:', error);
-    res.status(500).json({ message: 'Failed to establish Neural Sync' });
-  }
-});
 
 // 404 Handler
 app.use((req, res) => {
