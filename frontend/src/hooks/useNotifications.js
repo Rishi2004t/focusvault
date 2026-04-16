@@ -52,7 +52,7 @@ export const useNotifications = (isAuthenticated) => {
       });
 
       // 4. Record Subscription in Focus Vault Backend
-      await api.post('/notifications/subscribe', subscription);
+      await api.post('/notifications/subscribe', subscription.toJSON());
       console.log('✅ Neural Sync Established Successfully.');
       return true;
     } catch (error) {

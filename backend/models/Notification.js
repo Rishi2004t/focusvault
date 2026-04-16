@@ -21,7 +21,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['TASK_REMINDER', 'SYSTEM_ALERT', 'MISSION_STATUS'],
+      enum: ['TASK_REMINDER', 'SYSTEM_ALERT', 'MISSION_STATUS', 'EARLY_WARNING', 'TASK_DUE_NOW', 'TASK_OVERDUE'],
       default: 'TASK_REMINDER',
     },
     read: {
