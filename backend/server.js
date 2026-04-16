@@ -76,27 +76,13 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // CORS setup with multiple origin support
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? process.env.FRONTEND_URL.split(',') 
-  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173'];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    // Neural Telemetry: Log incoming origin
-    if (origin) console.log(`📡 Neural Link Attempt from Origin: ${origin}`);
-    
-    // Liberal Dev Policy: Allow all local and private network variants
-    if (!origin || 
-        allowedOrigins.indexOf(origin) !== -1 || 
-        origin.includes('localhost') || 
-        origin.includes('127.0.0.1') || 
-        origin.match(/^http:\/\/(10|172|192)\./) // Matches 10.x.x.x, 172.x.x.x, 192.x.x.x
-    ) {
-      return callback(null, true);
-    }
-    const msg = `The CORS policy for this site does not allow access from the specified Origin (${origin}).`;
-    return callback(new Error(msg), false);
-  },
+  origin: [
+    "https://focusvault-khaki.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
