@@ -37,15 +37,20 @@ import aiRoutes from './routes/ai.js';
 import soulRoutes from './routes/soul.js';
 import notificationRoutes from './routes/notifications.js';
 // Initialize Web Push with Neural Keys
-if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-  console.warn('⚠️ Web Push keys missing in shell environment. Neural sync may be limited.');
-} else {
-  webpush.setVapidDetails(
-    process.env.VAPID_EMAIL || 'mailto:support@focusvault.com',
-    process.env.VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
-  );
-  console.log('📡 Neural Web Push initialized with custom vector.');
+try {
+  if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
+    console.warn('⚠️ Web Push keys missing in shell environment. Neural sync may be limited.');
+  } else {
+    webpush.setVapidDetails(
+      process.env.VAPID_EMAIL || 'mailto:support@focusvault.com',
+      process.env.VAPID_PUBLIC_KEY,
+      process.env.VAPID_PRIVATE_KEY
+    );
+    console.log('📡 Neural Web Push initialized with custom vector.');
+  }
+} catch (error) {
+  console.error('❌ Failed to initialize Web Push:', error.message);
+  console.warn('⚠️ Server is running but Background Notifications will fail until VAPID keys are fixed in Dashboard.');
 }
 
 const app = express();
