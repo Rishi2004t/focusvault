@@ -119,7 +119,7 @@ const AssetVault = () => {
     // Neural Proxy Download: Bypasses transformation blocks and CORS
     // Using a direct GET link to the proxy endpoint with token for auth
     const token = localStorage.getItem('authToken');
-    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const apiBase = import.meta.env.VITE_API_URL || 'https://backend-06et.onrender.com';
     const downloadUrl = `${apiBase}/upload/download/${asset._id}?token=${token}`;
     
     // We open in a new window, the server responds with attachment headers, browser downloads it

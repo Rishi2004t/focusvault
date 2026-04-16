@@ -15,8 +15,8 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const socketUrl = API.replace(/\/api$/, '');
+      const API = import.meta.env.VITE_API_URL || 'https://backend-06et.onrender.com';
+      const socketUrl = API; // No need to replace /api anymore as we fixed the env var logic
 
       const newSocket = io(socketUrl, {
         withCredentials: true,

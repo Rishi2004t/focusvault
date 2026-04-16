@@ -11,7 +11,7 @@ import api from '../utils/api';
 import MainLayout from '../components/MainLayout';
 import { useAuth } from '../context/AuthContext';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API = import.meta.env.VITE_API_URL || 'https://backend-06et.onrender.com';
 const SOCKET_URL = API.replace(/\/api$/, '');
 
 // ─── Syntax Highlight Colours ─────────────────────────────────────────────────
