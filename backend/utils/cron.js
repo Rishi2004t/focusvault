@@ -73,6 +73,11 @@ export const initCronJobs = () => {
 // ── Unified Notification Sender ──
 async function sendNotification(io, task, message, type, stage) {
   try {
+    const now = new Date();
+    console.log(`[Cron] 🎯 DETECTED: Stage ${stage} for "${task.title}"`);
+    console.log(`[Cron] Server Time (UTC): ${now.toISOString()}`);
+    console.log(`[Cron] Task Due (UTC): ${new Date(task.dueDate).toISOString()}`);
+
     // 1. Save to DB
     await Notification.create({
       userId: task.userId,
@@ -88,19 +93,22 @@ async function sendNotification(io, task, message, type, stage) {
     await task.save();
 
     // 3. Socket.io real-time push (for active tab)
-    io.to(task.userId.toString()).emit('task_due', {
-      id: task._id,
-      title: task.title,
-      message,
-      project: task.projectContext,
-      priority: task.priorityMatrix,
-      link: task.link,
-      stage
-    });
+    if (io) {
+      io.to(task.userId.toString()).emit('task_due', {
+        id: task._id,
+        title: task.title,
+        message,
+        project: task.projectContext,
+        priority: task.priorityMatrix,
+        link: task.link,
+        stage
+      });
+    }
 
     // 4. Web Push (for background/closed browser)
     try {
       const subscriptions = await Subscription.find({ userId: task.userId });
+      console.log(`[Cron] Found ${subscriptions.length} push subscriptions for user ${task.userId}`);
       
       const payload = JSON.stringify({
         title: stage === 1 ? '⏳ Task Coming Up' : stage === 2 ? '🚨 Task Due Now' : '🔴 Task Overdue',
@@ -110,16 +118,24 @@ async function sendNotification(io, task, message, type, stage) {
         data: { taskId: task._id, url: '/tasks', link: task.link }
       });
 
-      subscriptions.forEach(sub => {
-        webpush.sendNotification(sub, payload)
-          .catch(err => console.error('❌ Push failed:', sub.endpoint.substring(0, 30)));
-      });
+      for (const sub of subscriptions) {
+        try {
+          await webpush.sendNotification(sub, payload);
+          console.log(`   ✅ Push SUCCESS for endpoint: ...${sub.endpoint.slice(-30)}`);
+        } catch (err) {
+          console.error(`   ❌ Push FAILED: ${err.statusCode || 'Unknown'} - ${err.message}`);
+          if (err.statusCode === 410 || err.statusCode === 404) {
+             await Subscription.findByIdAndDelete(sub._id);
+             console.log('      🗑️ Deleted expired subscription.');
+          }
+        }
+      }
     } catch (err) {
       console.error('❌ Web Push logic error:', err);
     }
 
-    console.log(`📡 [Stage ${stage}] Notification sent for task: ${task.title}`);
+    console.log(`📡 [Stage ${stage}] Process complete for: ${task.title}`);
   } catch (err) {
-    console.error(`❌ Failed to send stage ${stage} notification:`, err);
+    console.error(`❌ Critical failure in stage ${stage} notification:`, err);
   }
 }
