@@ -11,7 +11,8 @@ import api from '../utils/api';
 import MainLayout from '../components/MainLayout';
 import { useAuth } from '../context/AuthContext';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const SOCKET_URL = API.replace(/\/api$/, '');
 
 // ─── Syntax Highlight Colours ─────────────────────────────────────────────────
 const LANG_COLORS = {

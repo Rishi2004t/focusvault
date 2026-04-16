@@ -13,9 +13,8 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      const socketUrl = import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL.startsWith('/')
-        ? window.location.origin
-        : (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
+      const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const socketUrl = API.replace(/\/api$/, '');
 
       const newSocket = io(socketUrl, {
         withCredentials: true,
