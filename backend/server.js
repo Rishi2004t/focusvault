@@ -78,15 +78,18 @@ app.use(passport.initialize());
 // CORS setup with multiple origin support
 app.use(cors({
   origin: [
-    "https://focusvault-khaki.vercel.app",
     "http://localhost:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "https://focusvault-khaki.vercel.app"
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Root Health Check Route
+app.get('/', (req, res) => {
+  res.send('Backend running');
+});
 
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -94,11 +97,11 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('✅ MongoDB connected successfully');
+    console.log('MongoDB connected');
     // Start Cron Jobs after successful DB connection
     initCronJobs();
   })
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // Health Check Route
 app.get('/api/health', (req, res) => {
