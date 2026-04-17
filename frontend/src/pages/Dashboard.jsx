@@ -19,6 +19,7 @@ import TodayFocus from '../components/dashboard/TodayFocus';
 import DashboardQuickActions from '../components/dashboard/DashboardQuickActions';
 import NeuralHeatmap from '../components/dashboard/NeuralHeatmap';
 import DashboardVideo from '../components/dashboard/DashboardVideo';
+import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
 
 // ── Skeleton Loader ──
 const DashboardSkeleton = () => (
@@ -253,6 +254,9 @@ export default function Dashboard() {
                   ))}
                </div>
             </div>
+
+            {/* Dynamic User Feedback section */}
+            <FeedbackMarquee />
 
             {/* System Console */}
             <div className="mt-20 pt-12 border-t border-[var(--glass-border)] opacity-60 hover:opacity-100 transition-opacity">
