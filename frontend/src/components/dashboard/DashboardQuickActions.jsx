@@ -10,7 +10,8 @@ import {
   Sparkles,
   Search,
   BookOpen,
-  Plus
+  Plus,
+  Zap
 } from 'lucide-react';
 
 export default function DashboardQuickActions({ onTestPulse }) {
