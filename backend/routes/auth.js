@@ -48,8 +48,9 @@ router.get(
     });
     
     // Redirect to frontend with token and user in query params
-    const frontendUrl = 'http://localhost:3000/dashboard';
-    const redirectUrl = `${frontendUrl}?token=${token}&user=${encodeURIComponent(userStr)}`;
+    const isProd = process.env.NODE_ENV === 'production';
+    const frontendBase = isProd ? 'https://focusvault-khaki.vercel.app' : 'http://localhost:3000';
+    const redirectUrl = `${frontendBase}/dashboard?token=${token}&user=${encodeURIComponent(userStr)}`;
     res.redirect(redirectUrl);
   }
 );
@@ -69,8 +70,9 @@ router.get(
     });
     
     // Redirect to frontend with token and user in query params
-    const frontendUrl = 'http://localhost:3000/dashboard';
-    const redirectUrl = `${frontendUrl}?token=${token}&user=${encodeURIComponent(userStr)}`;
+    const isProd = process.env.NODE_ENV === 'production';
+    const frontendBase = isProd ? 'https://focusvault-khaki.vercel.app' : 'http://localhost:3000';
+    const redirectUrl = `${frontendBase}/dashboard?token=${token}&user=${encodeURIComponent(userStr)}`;
     res.redirect(redirectUrl);
   }
 );
