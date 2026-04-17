@@ -34,7 +34,7 @@ export default function SystemConsole({ onReboot }) {
   }, [socket]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [logs]);
 
   const handleReboot = async () => {
