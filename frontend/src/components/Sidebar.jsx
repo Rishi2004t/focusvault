@@ -145,12 +145,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        <AnimatePresence>
-          {isGameOpen && (
-            <FocusFlowGame isOpen={isGameOpen} onClose={() => setIsGameOpen(false)} />
-          )}
-        </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {isGameOpen && (
+          <FocusFlowGame isOpen={isGameOpen} onClose={() => setIsGameOpen(false)} />
+        )}
+      </AnimatePresence>
     </>
   );
 };
