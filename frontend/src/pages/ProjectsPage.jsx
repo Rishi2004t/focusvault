@@ -814,21 +814,6 @@ export default function ProjectsPage() {
             </div>
           </div>
         )}
-                        </div>
-                      ))}
-                      {(t.members?.length || 0) > 4 && (
-                        <div className="w-8 h-8 rounded-xl bg-[var(--bg-silk)] flex items-center justify-center text-[9px] font-black text-[var(--muted-text)] border border-[var(--glass-border)] shadow-sm">
-                          +{t.members.length - 4}
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">Live Workspace</span>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Entry screen if no teams */}
         {teams.length === 0 && !activeTeam && (
