@@ -13,7 +13,7 @@ import {
   Plus
 } from 'lucide-react';
 
-export default function DashboardQuickActions() {
+export default function DashboardQuickActions({ onTestPulse }) {
   const navigate = useNavigate();
 
   const actions = [
@@ -45,13 +45,13 @@ export default function DashboardQuickActions() {
       shadowColor: 'rgba(245, 158, 11, 0.5)'
     },
     { 
-      label: 'Deep Search', 
-      sub: 'Filter Vault',
-      icon: <Search size={22} />, 
-      path: '/notes', 
-      color: '#06B6D4',
-      bg: 'bg-cyan-500/10',
-      shadowColor: 'rgba(6, 182, 212, 0.5)'
+      label: 'Neural Pulse', 
+      sub: 'Test Alerts',
+      icon: <Zap size={22} className="animate-pulse" />, 
+      action: onTestPulse,
+      color: '#10B981',
+      bg: 'bg-emerald-500/10',
+      shadowColor: 'rgba(16, 185, 129, 0.5)'
     }
   ];
 
@@ -73,7 +73,7 @@ export default function DashboardQuickActions() {
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -8, scale: 1.03 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(action.path)}
+            onClick={() => action.action ? action.action() : navigate(action.path)}
             className="group relative flex flex-col items-center justify-center p-8 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--glass-border)] shadow-xl shadow-[var(--accent-glow)]/5 hover:border-[var(--accent-glow)]/50 transition-all overflow-hidden"
             style={{ '--hover-shadow': action.shadowColor }}
           >
@@ -105,13 +105,13 @@ export default function DashboardQuickActions() {
 
             {/* Pulsing indicator */}
             <div className="absolute top-4 right-4">
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-glow)] opacity-0 group-hover:opacity-100 group-hover:animate-ping shadow-[0_0_8px_var(--accent-glow)]" />
+              <div className={`w-1.5 h-1.5 rounded-full bg-[var(--accent-glow)] ${action.action ? 'animate-ping' : 'opacity-0'} group-hover:opacity-100 shadow-[0_0_8px_var(--accent-glow)]`} />
             </div>
             
             {/* Plus icon on hover */}
             <div className="absolute bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                <div className="w-8 h-8 rounded-full bg-[var(--primary-text)] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                  <Plus size={16} />
+                  {action.action ? <Zap size={16} /> : <Plus size={16} />}
                </div>
             </div>
           </motion.button>

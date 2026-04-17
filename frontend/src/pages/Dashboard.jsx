@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, Zap, ShieldAlert, BookOpen, Sparkles, ArrowUpRight } from 'lucide-react';
+import { RefreshCw, Zap, ShieldAlert, BookOpen, Sparkles, ArrowUpRight, Terminal } from 'lucide-react';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
@@ -20,6 +20,12 @@ import DashboardQuickActions from '../components/dashboard/DashboardQuickActions
 import NeuralHeatmap from '../components/dashboard/NeuralHeatmap';
 import DashboardVideo from '../components/dashboard/DashboardVideo';
 import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
+
+import { 
+  requestNotificationPermission, 
+  registerServiceWorker, 
+  subscribeToPush 
+} from '../utils/notifications';
 
 // ── Skeleton Loader ──
 const DashboardSkeleton = () => (
@@ -94,22 +100,41 @@ export default function Dashboard() {
     });
   };
 
+  const handleTestPulse = async () => {
+    const loader = toast.loading('Initiating Neural Pulse...');
+    try {
+      const hasPermission = await requestNotificationPermission();
+      if (!hasPermission) {
+        toast.error('Neural alerts blocked. Please enable notifications in your browser settings.', { id: loader });
+        return;
+      }
+      const registration = await registerServiceWorker();
+      if (!registration) {
+        toast.error('Service Worker sync failed. Background alerts unavailable.', { id: loader });
+        return;
+      }
+      await subscribeToPush(registration);
+      const res = await api.get('/notifications/test-push');
+      toast.success(res.data.message || 'Signal broadcasted successfully!', { id: loader });
+    } catch (err) {
+      console.error('❌ Pulse Failure:', err);
+      toast.error('Neural Pulse failed to transmit.', { id: loader });
+    }
+  };
+
   useEffect(() => {
     fetchDashboardData();
-  }, [fetchDashboardData]);
+  }, [fetchDashboardData, refreshKey]);
 
-  // Neural Socket Listener: Live Activity Stream
   useEffect(() => {
     if (socket) {
       const handleNewActivity = (activity) => {
-        console.log('📡 Live Activity Received:', activity);
         setData(prev => ({
           ...prev,
           activityLogs: [activity, ...(prev.activityLogs || [])].slice(0, 15)
         }));
         setLastSynced(new Date());
       };
-
       socket.on('new_activity', handleNewActivity);
       return () => socket.off('new_activity', handleNewActivity);
     }
@@ -158,34 +183,24 @@ export default function Dashboard() {
             exit={{ opacity: 0 }}
             className="pb-32"
           >
-            {/* Header / Hero */}
             <DashboardHero user={user} stats={data?.stats} lastSynced={lastSynced} onRefresh={handleRefresh} />
 
-            {/* Action Row: Focus + Feed */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-12">
               <div className="xl:col-span-2">
-                <TodayFocus 
-                  tasks={data?.urgentTasks} 
-                  onToggle={handleTaskToggle}
-                />
+                <TodayFocus tasks={data?.urgentTasks} onToggle={handleTaskToggle} />
               </div>
               <div className="xl:col-span-1">
                 <DashboardActivityFeed activities={data?.activityLogs} />
               </div>
             </div>
 
-            {/* Video Hero Section */}
             <DashboardVideo />
-
-            {/* Quick Actions (Command Bar) */}
-            <DashboardQuickActions />
+            <DashboardQuickActions onTestPulse={handleTestPulse} />
             
-            {/* Heatmap Visualization */}
             <div className="mt-12 sm:mt-16">
               <NeuralHeatmap />
             </div>
 
-            {/* Archive / Recent Grid */}
             <div className="mt-12 sm:mt-16 mb-20">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-8 h-8 rounded-lg bg-[var(--bg-silk)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--muted-text)]">
@@ -193,14 +208,9 @@ export default function Dashboard() {
                 </div>
                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic">Archive Overviews</h3>
               </div>
-              <DashboardRecentGrid 
-                notes={data?.recentNotes} 
-                assets={data?.recentAssets} 
-                tasks={data?.urgentTasks} 
-              />
+              <DashboardRecentGrid notes={data?.recentNotes} assets={data?.recentAssets} tasks={data?.urgentTasks} />
             </div>
 
-            {/* Lower Analytics Section */}
             <div className="bg-[var(--bg-silk)]/30 rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-10 border border-[var(--glass-border)] mt-16 sm:mt-24">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
@@ -211,18 +221,12 @@ export default function Dashboard() {
                 </div>
                 <button className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent-glow)]">Export Intelligence</button>
               </div>
-
               <DashboardStatsGrid stats={data?.stats} />
-              
               <div className="mt-12">
-                <DashboardCharts 
-                  weeklyData={data?.weeklyData} 
-                  distributionData={data?.distributionData} 
-                />
+                <DashboardCharts weeklyData={data?.weeklyData} distributionData={data?.distributionData} />
               </div>
             </div>
 
-            {/* Neural Suggestions */}
             <div className="mt-20">
                <div className="flex items-center gap-3 mb-8">
                   <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500">
@@ -255,14 +259,11 @@ export default function Dashboard() {
                </div>
             </div>
 
-            {/* Dynamic User Feedback section */}
             <FeedbackMarquee />
 
-            {/* System Console */}
             <div className="mt-20 pt-12 border-t border-[var(--glass-border)] opacity-60 hover:opacity-100 transition-opacity">
               <SystemConsole onReboot={() => setRefreshKey(k => k + 1)} />
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
