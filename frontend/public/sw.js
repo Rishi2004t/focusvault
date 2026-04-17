@@ -38,14 +38,14 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: Stale-While-Revalidate Strategy
+// Fetch: Stale-While-Revalidate Strategy with Fail-safe
 self.addEventListener('fetch', (event) => {
   // Only cache GET requests from our own origin
   if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  // Skip API calls for now to prevent caching stale auth/data
+  // Skip API calls for now
   if (event.request.url.includes('/api/')) {
     return;
   }
@@ -53,17 +53,23 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // Cache the new response
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
-      }).catch(() => {
-        // Failure: Return cached response if available
-        return cachedResponse;
+        // Cache the new response if it's valid
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      }).catch((err) => {
+        console.warn('📡 [SW] Fetch failed, checking cache...', err);
+        return cachedResponse || Promise.reject('no-match');
       });
 
       return cachedResponse || fetchPromise;
+    }).catch(() => {
+      // Emergency Fallback: If everything fails, try to fetch directly from network
+      return fetch(event.request);
     })
   );
 });
