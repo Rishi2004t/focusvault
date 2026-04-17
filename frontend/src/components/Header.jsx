@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Bell, User, LogOut, Settings, Zap, ChevronDown, Clock, CheckCircle2, Database, FileText, Palette, Sparkles, Menu } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
+import api from '../utils/api';
+import ThemePicker from './ThemePicker';
+import ProductExperiencePanel from './ProductExperiencePanel';
 
 export default function Header({ onMenuClick }) {
   const { user, logout } = useAuth();

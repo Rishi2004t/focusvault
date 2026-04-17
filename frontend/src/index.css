@@ -6,16 +6,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Patrick+Hand&display=swap');
 
 @layer base {
+  html, #root {
+    background: var(--bg-silk);
+    transition: background 0.4s ease;
+    overflow-x: hidden;
+  }
+
   body {
     color: var(--primary-text);
     font-family: 'Outfit', 'Inter', system-ui, sans-serif;
     background: var(--bg-silk);
     transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  html, #root {
-    background: var(--bg-silk);
-    transition: background 0.4s ease;
+    overflow-x: hidden;
+    width: 100vw;
   }
 
   *, *::before, *::after {
