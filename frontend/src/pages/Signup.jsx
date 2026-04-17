@@ -52,10 +52,10 @@ export default function Signup() {
           >
             <UserPlus size={32} className="text-white" />
           </motion.div>
-          <h1 className="text-5xl font-black tracking-tighter text-white mb-2">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-white mb-2">
             Join<span className="neon-text-blue">Vault</span>
           </h1>
-          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">
+          <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] sm:text-xs">
             Begin Your Productivity Evolution
           </p>
         </div>
@@ -63,7 +63,7 @@ export default function Signup() {
         <GlassCard className="border-white/10 p-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Alias / Username</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-80">Alias / Username</label>
               <div className="relative group">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-neon-blue" size={18} />
                 <input
@@ -78,7 +78,7 @@ export default function Signup() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Secure Email</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-80">Secure Email</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-neon-purple" size={18} />
                 <input
@@ -93,7 +93,7 @@ export default function Signup() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Access Credentials</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-80">Access Credentials</label>
               <div className="relative group">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-neon-blue" size={18} />
                 <input
@@ -131,20 +131,20 @@ export default function Signup() {
              </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <a 
                href={`${API}/api/auth/google`}
-               className="flex items-center justify-center gap-3 py-3 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all group"
+               className="flex items-center justify-center gap-3 py-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all group"
              >
                 <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" className="w-5 h-5 grayscale group-hover:grayscale-0 transition-all" alt="Google" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white">Google</span>
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-white">Google</span>
              </a>
              <a 
                href={`${API}/api/auth/github`}
-               className="flex items-center justify-center gap-3 py-3 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all group"
+               className="flex items-center justify-center gap-3 py-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all group"
              >
                 <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" className="w-5 h-5 invert grayscale group-hover:grayscale-0 transition-all" alt="GitHub" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white">GitHub</span>
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-white">GitHub</span>
              </a>
           </div>
         </form>
