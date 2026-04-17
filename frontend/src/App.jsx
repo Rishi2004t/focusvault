@@ -21,6 +21,7 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import ProjectsPage from './pages/ProjectsPage';
 import FocusModePage from './pages/FocusModePage';
+import NetworkPage from './pages/NetworkPage';
 import NeuralIDE from './pages/NeuralIDE';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -128,6 +129,15 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <DailyPlanner />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/network"
+        element={
+          <PrivateRoute>
+            <NetworkPage />
           </PrivateRoute>
         }
       />

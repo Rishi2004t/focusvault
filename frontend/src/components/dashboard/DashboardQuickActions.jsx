@@ -11,7 +11,8 @@ import {
   Search,
   BookOpen,
   Plus,
-  Zap
+  Zap,
+  Share2
 } from 'lucide-react';
 
 export default function DashboardQuickActions({ onTestPulse }) {
@@ -53,6 +54,15 @@ export default function DashboardQuickActions({ onTestPulse }) {
       color: '#10B981',
       bg: 'bg-emerald-500/10',
       shadowColor: 'rgba(16, 185, 129, 0.5)'
+    },
+    { 
+      label: 'View Network', 
+      sub: 'Neural Topology',
+      icon: <Share2 size={22} />, 
+      path: '/network', 
+      color: '#06B6D4',
+      bg: 'bg-cyan-500/10',
+      shadowColor: 'rgba(6, 182, 212, 0.5)'
     }
   ];
 
