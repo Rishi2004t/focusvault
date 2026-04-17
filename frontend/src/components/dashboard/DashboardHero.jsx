@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Award, Clock, Activity, Zap, RefreshCw, Send } from 'lucide-react';
+import { Play, Flame, Award, Clock, Activity, Zap, RefreshCw, Send, Target } from 'lucide-react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import AnimatedCounter from '../shared/AnimatedCounter';
 
 export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
+  const navigate = useNavigate();
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Operational Morning' : hour < 18 ? 'Systems Active' : 'System Standby';
   
@@ -69,6 +71,26 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
         >
           {smartMessage}
         </motion.p>
+
+        {/* Focus Mode CTA */}
+        <motion.div
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ delay: 0.3 }}
+           className="mt-8 flex flex-wrap items-center gap-4"
+        >
+           <button 
+             onClick={() => navigate('/focus')}
+             className="flex items-center gap-4 px-8 py-4 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-xl shadow-white/5 group relative overflow-hidden"
+           >
+              <div className="absolute inset-0 bg-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity" />
+              <Play size={16} className="fill-current" /> Enter Focus Mode
+           </button>
+           
+           <div className="hidden sm:flex items-center gap-2 px-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest italic group hover:text-emerald-500 transition-colors">
+              <Target size={14} className="group-hover:animate-spin" /> Deep Work Protocol
+           </div>
+        </motion.div>
         
         <motion.div 
           initial={{ opacity: 0 }}
