@@ -31,75 +31,118 @@ function EntryScreen({ onCreate, onJoin, loading }) {
   const [mode, setMode] = useState(null); // 'create' | 'join'
 
   return (
-    <div className="min-h-[85vh] flex flex-col items-center justify-center gap-16 px-4 relative overflow-hidden">
-      {/* ── Premium Background Decor ── */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px] -z-10" />
-      <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] -z-10" />
+    <div className="min-h-[90vh] flex flex-col items-center justify-center gap-12 px-4 relative overflow-hidden bg-slate-50/50">
+      {/* ── Neural Grid & Glow ── */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-400/10 rounded-full blur-[160px] -z-10" />
 
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-center relative"
+        className="text-center relative z-20"
       >
         <motion.div 
-          initial={{ scale: 0, rotate: -20 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-          className="w-24 h-24 rounded-[2.5rem] bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center mx-auto mb-8 shadow-[0_20px_50px_rgba(16,185,129,0.3)] relative group"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
+          className="relative w-24 h-24 mx-auto mb-10"
         >
-          <div className="absolute inset-0 rounded-[2.5rem] bg-emerald-400 blur-xl opacity-40 group-hover:opacity-60 transition-opacity" />
-          <Users size={42} className="text-white relative z-10" />
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl"
+          />
+          <div className="relative w-full h-full rounded-[2.5rem] bg-slate-900 flex items-center justify-center shadow-2xl border border-emerald-500/30">
+            <Users size={40} className="text-emerald-400 relative z-10" />
+          </div>
         </motion.div>
 
-        <motion.h1 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-6xl sm:text-7xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-emerald-700"
-        >
+        <h1 className="text-7xl sm:text-8xl font-black tracking-tighter text-slate-900 mb-6">
           Collab<span className="text-emerald-500">Hub</span>
-        </motion.h1>
-
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="text-slate-600 text-xs sm:text-sm font-black uppercase tracking-[0.6em] max-w-md mx-auto leading-relaxed"
+        </h1>
+        
+        <motion.div
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 1 }}
+           transition={{ delay: 0.4 }}
+           className="space-y-6"
         >
-          Neural Engineering Workspace
-        </motion.p>
+          <p className="text-emerald-600 text-xs sm:text-sm font-black uppercase tracking-[0.4em]">
+             Collaborate. Code. Build — Together in Real-Time.
+          </p>
+          <p className="text-slate-500 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed border-t border-slate-200 pt-6">
+            Create squads, collaborate with your team, share ideas, and build projects together in real-time — all in one place.
+          </p>
+        </motion.div>
       </motion.div>
 
       {!mode && (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="flex flex-col sm:flex-row gap-6 relative z-10"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05, y: -4, shadow: "0 20px 40px rgba(16,185,129,0.2)" }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => setMode('create')}
-            className="group flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-slate-900 text-white font-bold text-sm uppercase tracking-widest transition-all overflow-hidden relative"
+        <div className="space-y-12 w-full flex flex-col items-center relative z-30">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="flex flex-col sm:flex-row gap-6"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" /> 
-            Create Squad
-          </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => setMode('create')}
+              className="group relative flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-slate-900 text-white font-black text-xs uppercase tracking-widest shadow-2xl shadow-emerald-900/40 border border-emerald-500/20 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Plus size={18} /> Start a New Squad
+            </motion.button>
 
-          <motion.button
-            whileHover={{ scale: 1.05, y: -4, backgroundColor: "rgba(255,255,255,0.8)" }}
-            whileTap={{ scale: 0.96 }}
-            onClick={() => setMode('join')}
-            className="flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-white/40 backdrop-blur-md border border-slate-200 text-slate-900 font-bold text-sm uppercase tracking-widest transition-all shadow-xl shadow-slate-200/50"
+            <motion.button
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => setMode('join')}
+              className="flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-white border border-slate-200 text-slate-900 font-black text-xs uppercase tracking-widest shadow-xl transition-all"
+            >
+              <Key size={18} className="text-emerald-500" /> Join with Access Key
+            </motion.button>
+          </motion.div>
+
+          {/* Minimal Features Section */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="flex flex-wrap justify-center gap-x-12 gap-y-4 px-6"
           >
-            <Key size={20} className="text-emerald-500" /> 
-            Join Squad
-          </motion.button>
-        </motion.div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <span className="text-emerald-500 text-sm">⚡</span> Real-time collaboration
+            </div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <span className="text-emerald-500 text-sm">🔐</span> Secure team access
+            </div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <span className="text-emerald-500 text-sm">🚀</span> Distraction-free workspace
+            </div>
+          </motion.div>
+        </div>
       )}
+
+      {/* Scrolling Feedback Marquee */}
+      <div className="absolute bottom-0 left-0 w-full bg-white/50 backdrop-blur-md border-t border-slate-200 py-4 overflow-hidden">
+        <div className="flex whitespace-nowrap animate-marquee hover:pause-on-hover">
+          {[1, 2, 3].map((set) => (
+            <div key={set} className="flex gap-16 px-8 items-center">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3">
+                <span className="text-emerald-500">🔥</span> Loved by developers worldwide
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3">
+                <span className="text-emerald-500">💬</span> Boosted productivity by 2x
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3">
+                <span className="text-emerald-500">🚀</span> Seamless real-time collaboration
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <AnimatePresence>
         {mode === 'create' && (
