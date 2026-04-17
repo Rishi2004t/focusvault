@@ -55,7 +55,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-5xl font-black text-[var(--primary-text)] tracking-tight italic"
+          className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--primary-text)] tracking-tight italic"
         >
           {greeting}, <span className="text-[var(--accent-glow)] opacity-80 drop-shadow-[0_0_15px_rgba(var(--accent-color-rgb),0.5)]">{user?.name || user?.username || 'Operative'}</span>
         </motion.h1>
@@ -74,7 +74,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-wrap gap-10 mt-8 group/stats"
+          className="flex flex-wrap gap-6 sm:gap-10 mt-8 group/stats"
         >
           <div className="flex flex-col hover:-translate-y-1 transition-transform duration-300">
             <span className="text-[9px] font-black text-[var(--muted-text)] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
@@ -86,7 +86,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
             </div>
           </div>
 
-          <div className="w-[1px] h-12 bg-[var(--glass-border)]" />
+          <div className="w-[1px] h-12 bg-[var(--glass-border)] hidden sm:block" />
 
           <div className="flex flex-col hover:-translate-y-1 transition-transform duration-300">
             <span className="text-[9px] font-black text-[var(--muted-text)] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
@@ -98,7 +98,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
             </div>
           </div>
 
-          <div className="w-[1px] h-12 bg-[var(--glass-border)]" />
+          <div className="w-[1px] h-12 bg-[var(--glass-border)] hidden sm:block" />
 
           <div className="flex flex-col hover:-translate-y-1 transition-transform duration-300">
             <span className="text-[9px] font-black text-[var(--muted-text)] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">

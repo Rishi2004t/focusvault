@@ -125,34 +125,34 @@ export default function DashboardStatsGrid({ stats }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               layoutId={`card-${selectedStat.label}`}
-              className="w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden"
+              className="w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 shadow-2xl relative overflow-hidden"
             >
               {/* Background Accent */}
               <div className="absolute top-0 right-0 w-64 h-64 opacity-10 blur-3xl rounded-full" style={{ backgroundColor: selectedStat.color }} />
 
-              <div className="flex justify-between items-start relative z-10 mb-10">
-                <div className="flex items-center gap-5">
-                   <div className="w-16 h-16 rounded-[2rem] flex items-center justify-center shadow-lg"
+              <div className="flex justify-between items-start relative z-10 mb-8 sm:mb-10">
+                <div className="flex items-center gap-4 sm:gap-5">
+                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center shadow-lg shrink-0"
                         style={{ backgroundColor: `${selectedStat.color}10`, border: `1px solid ${selectedStat.color}30` }}>
-                     {React.cloneElement(selectedStat.icon, { size: 28, style: { color: selectedStat.color } })}
+                     {React.cloneElement(selectedStat.icon, { size: 24, className: "sm:w-7 sm:h-7", style: { color: selectedStat.color } })}
                    </div>
                    <div>
-                     <h2 className="text-2xl font-black text-[var(--primary-text)] italic tracking-tight">{selectedStat.label} Analysis</h2>
+                     <h2 className="text-xl sm:text-2xl font-black text-[var(--primary-text)] italic tracking-tight">{selectedStat.label}</h2>
                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted-text)] mt-1">Telemetry Data Output</p>
                    </div>
                 </div>
                 <button 
                   onClick={() => setSelectedStat(null)}
-                  className="w-10 h-10 rounded-full bg-[var(--bg-silk)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--muted-text)] hover:text-[var(--accent-glow)] transition-all"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--bg-silk)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--muted-text)] hover:text-[var(--accent-glow)] transition-all"
                 >
-                  <X size={20} />
+                  <X size={18} />
                 </button>
               </div>
 
-              <div className="grid grid-cols-3 gap-8 mb-12 relative z-10">
-                 <div className="p-6 rounded-3xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)]">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-10 sm:mb-12 relative z-10">
+                 <div className="p-4 sm:p-6 rounded-3xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)]">
                     <p className="text-[9px] font-black uppercase tracking-widest text-[var(--muted-text)] mb-2">Real-Time Value</p>
-                    <p className="text-3xl font-black text-[var(--primary-text)] tracking-tighter">
+                    <p className="text-2xl sm:text-3xl font-black text-[var(--primary-text)] tracking-tighter">
                       {selectedStat.label === 'Vault Storage' ? selectedStat.value : <AnimatedCounter value={selectedStat.value} />}
                     </p>
                  </div>

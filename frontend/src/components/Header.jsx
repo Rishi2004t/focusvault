@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Bell, User, LogOut, Settings, Zap, ChevronDown, Clock, CheckCircle2, Database, FileText, Palette, Sparkles } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useNavigate } from 'react-router-dom';
-import api from '../utils/api';
-import ThemePicker from './ThemePicker';
-import ProductExperiencePanel from './ProductExperiencePanel';
+import { Search, Bell, User, LogOut, Settings, Zap, ChevronDown, Clock, CheckCircle2, Database, FileText, Palette, Sparkles, Menu } from 'lucide-react';
 
-export default function Header() {
+export default function Header({ onMenuClick }) {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -26,7 +20,6 @@ export default function Header() {
   const profileRef = useRef(null);
   const notifRef = useRef(null);
 
-  // Fetch notifications (Both task reminders and system alerts)
   const fetchNotifs = async () => {
     try {
       const res = await api.get('/notifications');
@@ -90,11 +83,19 @@ export default function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
+  
   return (
     <>
-      <header className="h-20 fixed top-0 right-0 left-72 z-40 px-8 flex items-center justify-between bg-[var(--bg-card)]/80 backdrop-blur-md border-b border-[var(--glass-border)] shadow-[0_2px_24px_rgba(0,0,0,0.02)] transition-all duration-500">
+      <header className="h-20 fixed top-0 right-0 lg:left-72 left-0 z-40 px-4 lg:px-8 flex items-center justify-between bg-[var(--bg-card)]/80 backdrop-blur-md border-b border-[var(--glass-border)] shadow-[0_2px_24px_rgba(0,0,0,0.02)] transition-all duration-500">
         
+        {/* ── Mobile Menu Toggle ── */}
+        <button 
+          onClick={onMenuClick}
+          className="lg:hidden p-2 -ml-2 mr-2 text-[var(--secondary-text)] hover:text-[var(--accent-glow)] transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+
         {/* ── Global Search ── */}
         <div className="relative flex-1 max-w-xl" ref={searchRef}>
           <div className="relative group">
