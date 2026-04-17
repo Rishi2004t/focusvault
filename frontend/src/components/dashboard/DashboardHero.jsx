@@ -26,8 +26,8 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row items-start justify-between gap-8 mb-12">
-      <div className="flex-1">
+    <div className="flex flex-col xl:flex-row items-start justify-between gap-8 mb-8 sm:mb-12">
+      <div className="flex-1 w-full">
         <motion.div
            initial={{ opacity: 0, y: -10 }}
            animate={{ opacity: 1, y: 0 }}
@@ -112,7 +112,8 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
         </motion.div>
       </div>
 
-      <div className="w-full xl:w-96 p-8 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--glass-border)] shadow-2xl shadow-[var(--accent-glow)]/10 relative overflow-hidden group hover:shadow-[var(--accent-glow)]/30 hover:border-[var(--accent-glow)]/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+      {/* Experience Tracker Card */}
+      <div className="w-full xl:w-96 p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--glass-border)] shadow-2xl shadow-[var(--accent-glow)]/10 relative overflow-hidden group hover:shadow-[var(--accent-glow)]/30 hover:border-[var(--accent-glow)]/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer">
         {/* Animated Glow Grid */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none group-hover:opacity-[0.08] transition-opacity duration-500" 
              style={{ backgroundImage: 'radial-gradient(var(--accent-glow) 1px, transparent 1px)', backgroundSize: '16px 16px' }} />

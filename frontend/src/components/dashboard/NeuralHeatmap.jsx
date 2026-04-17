@@ -38,7 +38,7 @@ export default function NeuralHeatmap() {
   if (loading) return <div className="h-40 w-full animate-pulse bg-slate-100/5 rounded-3xl" />;
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
+    <div className="bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-2xl sm:rounded-[2.5rem] p-5 sm:p-8 shadow-2xl relative overflow-hidden group">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">

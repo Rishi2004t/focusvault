@@ -178,14 +178,14 @@ export default function Dashboard() {
 
             {/* Quick Actions (Command Bar) */}
             <DashboardQuickActions />
-
+            
             {/* Heatmap Visualization */}
-            <div className="mt-16">
+            <div className="mt-12 sm:mt-16">
               <NeuralHeatmap />
             </div>
 
             {/* Archive / Recent Grid */}
-            <div className="mt-16 mb-20">
+            <div className="mt-12 sm:mt-16 mb-20">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-8 h-8 rounded-lg bg-[var(--bg-silk)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--muted-text)]">
                   <BookOpen size={16} />
@@ -200,7 +200,7 @@ export default function Dashboard() {
             </div>
 
             {/* Lower Analytics Section */}
-            <div className="bg-[var(--bg-silk)]/30 rounded-[3rem] p-10 border border-[var(--glass-border)] mt-24">
+            <div className="bg-[var(--bg-silk)]/30 rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-10 border border-[var(--glass-border)] mt-16 sm:mt-24">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-[var(--primary-text)] text-white flex items-center justify-center">

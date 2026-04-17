@@ -32,10 +32,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon-purple/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-neon-blue/5 rounded-full blur-[100px] -z-10" />
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative overflow-x-hidden w-full max-w-[100vw]">
+      {/* Background Decor - Optimized for scale */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] bg-neon-purple/10 rounded-full blur-[80px] sm:blur-[120px] -z-10 animate-pulse" />
+      <div className="absolute top-1/4 left-1/4 w-[200px] sm:w-[400px] h-[200px] sm:h-[400px] bg-neon-blue/5 rounded-full blur-[60px] sm:blur-[100px] -z-10" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}

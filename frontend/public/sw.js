@@ -1,6 +1,6 @@
-/* Focus Vault Neural Service Worker - V4 (Force Invalidation) */
+/* Focus Vault Neural Service Worker - V4 (Force Invalidation for UI) */
 
-const CACHE_NAME = 'focus-vault-core-v2';
+const CACHE_NAME = 'focus-vault-core-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

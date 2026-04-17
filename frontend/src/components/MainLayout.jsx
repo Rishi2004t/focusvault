@@ -19,7 +19,7 @@ const MainLayout = ({ children, mainClassName = '' }) => {
         <Header onMenuClick={() => setIsSidebarOpen(true)} />
         
         <main
-          className={`flex-1 lg:ml-72 pt-20 relative px-4 sm:px-6 lg:px-8 max-w-full overflow-x-hidden ${mainClassName}`}
+          className={`flex-1 lg:ml-72 pt-16 sm:pt-20 relative px-4 sm:px-6 lg:px-8 max-w-full overflow-x-hidden ${mainClassName}`}
           style={{ zIndex: 5 }}
         >
           <AnimatePresence mode="wait">
