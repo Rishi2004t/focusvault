@@ -16,6 +16,14 @@ import { authMiddleware } from './middleware/auth.js';
 
 dotenv.config();
 
+// 📡 Neural OAuth Startup Diagnostic
+console.log('📡 [Neural Sync] Environment Status Check...');
+if (!process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID === 'dummy') {
+  console.warn('⚠️ [CRITICAL] GOOGLE_CLIENT_ID is missing or dummy. Social login will fail.');
+} else {
+  console.log(`✅ [Neural Sync] Google Auth Ready: ${process.env.GOOGLE_CLIENT_ID.substring(0, 10)}...`);
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

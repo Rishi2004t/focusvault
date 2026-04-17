@@ -29,6 +29,7 @@ passport.use(
       proxy: true,
     },
     async (accessToken, refreshToken, profile, done) => {
+      console.log('📡 [Strategy Execute] Google ID:', profile.id.substring(0, 5) + '...');
       try {
         let user = await User.findOne({ googleId: profile.id });
 
