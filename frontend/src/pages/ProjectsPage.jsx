@@ -31,36 +31,74 @@ function EntryScreen({ onCreate, onJoin, loading }) {
   const [mode, setMode] = useState(null); // 'create' | 'join'
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center gap-12 px-4">
-      <div className="text-center">
-        <div className="w-20 h-20 rounded-3xl bg-[var(--accent-glow)]/10 border border-[var(--accent-glow)]/20 flex items-center justify-center mx-auto mb-6 shadow-2xl">
-          <Users size={36} className="text-[var(--accent-glow)]" />
-        </div>
-        <h1 className="text-5xl font-black tracking-tighter text-[var(--primary-text)] mb-3">
-          Collab <span className="text-[var(--accent-glow)]">Hub</span>
-        </h1>
-        <p className="text-[var(--muted-text)] text-sm font-bold uppercase tracking-[0.3em]">Real-Time Engineering Workspace</p>
-      </div>
+    <div className="min-h-[85vh] flex flex-col items-center justify-center gap-16 px-4 relative overflow-hidden">
+      {/* ── Premium Background Decor ── */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px] -z-10" />
+      <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] -z-10" />
+
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-center relative"
+      >
+        <motion.div 
+          initial={{ scale: 0, rotate: -20 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+          className="w-24 h-24 rounded-[2.5rem] bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center mx-auto mb-8 shadow-[0_20px_50px_rgba(16,185,129,0.3)] relative group"
+        >
+          <div className="absolute inset-0 rounded-[2.5rem] bg-emerald-400 blur-xl opacity-40 group-hover:opacity-60 transition-opacity" />
+          <Users size={42} className="text-white relative z-10" />
+        </motion.div>
+
+        <motion.h1 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-6xl sm:text-7xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-emerald-700"
+        >
+          Collab<span className="text-emerald-500">Hub</span>
+        </motion.h1>
+
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="text-slate-600 text-xs sm:text-sm font-black uppercase tracking-[0.6em] max-w-md mx-auto leading-relaxed"
+        >
+          Neural Engineering Workspace
+        </motion.p>
+      </motion.div>
 
       {!mode && (
-        <div className="flex flex-col sm:flex-row gap-5">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="flex flex-col sm:flex-row gap-6 relative z-10"
+        >
           <motion.button
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05, y: -4, shadow: "0 20px 40px rgba(16,185,129,0.2)" }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => setMode('create')}
-            className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-[var(--accent-glow)]/20"
+            className="group flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-slate-900 text-white font-bold text-sm uppercase tracking-widest transition-all overflow-hidden relative"
           >
-            <Plus size={20} /> Create Squad
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" /> 
+            Create Squad
           </motion.button>
+
           <motion.button
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05, y: -4, backgroundColor: "rgba(255,255,255,0.8)" }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => setMode('join')}
-            className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] text-[var(--secondary-text)] font-black text-sm uppercase tracking-widest hover:border-[var(--accent-glow)]/40 transition-colors shadow-sm"
+            className="flex items-center gap-4 px-10 py-5 rounded-[2rem] bg-white/40 backdrop-blur-md border border-slate-200 text-slate-900 font-bold text-sm uppercase tracking-widest transition-all shadow-xl shadow-slate-200/50"
           >
-            <Key size={20} /> Join via Access Key
+            <Key size={20} className="text-emerald-500" /> 
+            Join Squad
           </motion.button>
-        </div>
+        </motion.div>
       )}
 
       <AnimatePresence>
@@ -633,8 +671,8 @@ export default function ProjectsPage() {
       <MainLayout>
         <div className="flex items-center justify-center min-h-[70vh]">
           <div className="text-center space-y-4">
-            <div className="w-12 h-12 rounded-full border-2 border-[var(--accent-glow)]/30 border-t-[var(--accent-glow)] animate-spin mx-auto" />
-            <p className="text-[var(--muted-text)] text-[10px] font-black uppercase tracking-widest">Syncing Neural Links...</p>
+            <div className="w-12 h-12 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin mx-auto" />
+            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Syncing Neural Links...</p>
           </div>
         </div>
       </MainLayout>
@@ -643,55 +681,96 @@ export default function ProjectsPage() {
 
   return (
     <MainLayout>
-      <div className="max-w-[1600px] mx-auto pb-24 px-6">
+      <div className="max-w-[1600px] mx-auto pb-24 px-6 relative">
+        {/* ── Background Glows ── */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px] -z-10" />
+        
         {/* Squad Switcher at top if user has teams */}
         {teams.length > 0 && !activeTeam && (
           <div className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
-              <div>
-                <h1 className="text-4xl font-black text-[var(--primary-text)] tracking-tight">Collab <span className="text-[var(--accent-glow)]">Hub</span></h1>
-                <p className="text-[var(--muted-text)] text-[10px] font-black uppercase tracking-widest mt-1.5 leading-none">Select a workspace or initialize a new squad</p>
-              </div>
-              <div className="flex gap-3">
-                <button
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <h1 className="text-5xl font-black text-slate-900 tracking-tighter">
+                  Collab<span className="text-emerald-500">Hub</span>
+                </h1>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] mt-3 leading-none opacity-70">Neural Workspaces Architecture</p>
+              </motion.div>
+              
+              <div className="flex gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => createTeam(prompt('Enter squad name:') || '')}
-                  className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-[var(--accent-glow)]/20 hover:scale-105 transition-all"
+                  className="flex items-center gap-3 px-8 py-3.5 rounded-2xl bg-slate-900 text-white font-bold text-xs uppercase tracking-widest shadow-xl shadow-slate-900/10 hover:shadow-emerald-500/20 transition-all border border-transparent"
                 >
                   <Plus size={16} /> Create Squad
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => joinTeam(prompt('Paste access key:') || '')}
-                  className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] text-[var(--primary-text)] font-black text-xs uppercase tracking-widest hover:border-[var(--accent-glow)]/40 hover:bg-[var(--bg-silk)]/50 transition-all shadow-sm"
+                  className="flex items-center gap-3 px-8 py-3.5 rounded-2xl bg-white/50 backdrop-blur-md border border-slate-200 text-slate-900 font-bold text-xs uppercase tracking-widest hover:border-emerald-500/40 transition-all shadow-sm"
                 >
                   <Key size={16} /> Join via Key
-                </button>
+                </motion.button>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {teams.map((t, i) => (
                 <motion.button
                   key={t._id} onClick={() => setActive(t)}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  whileHover={{ scale: 1.02, y: -4 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -8, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group text-left bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-7 transition-all duration-300 hover:shadow-2xl hover:shadow-[var(--accent-glow)]/5 hover:border-[var(--accent-glow)]/30"
+                  className="group relative text-left bg-white/40 backdrop-blur-sm border border-slate-200/60 rounded-[3rem] p-8 transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] hover:border-emerald-500/30 hover:bg-white/80"
                 >
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-[var(--accent-glow)]/10 border border-[var(--accent-glow)]/20 flex items-center justify-center">
-                      <Users size={22} className="text-[var(--accent-glow)]" />
-                    </div>
-                    <ChevronRight size={18} className="text-[var(--glass-border)] group-hover:text-[var(--accent-glow)] group-hover:translate-x-1 transition-all" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[var(--primary-text)] mb-1.5 group-hover:text-[var(--accent-glow)] transition-colors">{t.teamName}</h3>
-                  <p className="text-[10px] text-[var(--muted-text)] font-black uppercase tracking-widest leading-none">{t.members.length} Members • {t.codeSnippets?.length || 0} Snippets</p>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl -z-10 group-hover:bg-emerald-500/10 transition-colors" />
                   
-                  <div className="flex items-center justify-between mt-6 pt-6 border-t border-[var(--glass-border)]">
-                    <div className="flex items-center -space-x-2">
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500">
+                      <Users size={24} className="text-emerald-600" />
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                      <ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </div>
+
+                  <h3 className="text-2xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-emerald-600 transition-colors">{t.teamName}</h3>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] leading-none mb-8">{t.members.length} Members • {t.codeSnippets?.length || 0} Assets</p>
+                  
+                  <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                    <div className="flex items-center -space-x-3">
                       {(t.members || []).slice(0, 4).map((m, j) => (
-                        <div key={j} className="w-8 h-8 rounded-xl bg-[var(--brand-gradient)] flex items-center justify-center text-[9px] font-black text-white border-2 border-[var(--bg-card)] shadow-sm">
+                        <div 
+                          key={j} 
+                          className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-[10px] font-black text-white border-2 border-white shadow-md transform hover:z-10 hover:-translate-y-1 transition-all"
+                          title={m.userId?.username}
+                        >
                           {(m.userId?.username || 'U').charAt(0).toUpperCase()}
+                        </div>
+                      ))}
+                      {(t.members?.length || 0) > 4 && (
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-400 border-2 border-white shadow-sm">
+                          +{t.members.length - 4}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                       <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest px-3 py-1.5 bg-emerald-50 rounded-xl border border-emerald-100/50 shadow-sm">Active Sync</span>
+                    </div>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+        )}
                         </div>
                       ))}
                       {(t.members?.length || 0) > 4 && (
