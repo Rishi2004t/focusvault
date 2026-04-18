@@ -162,7 +162,7 @@ export default function DailyPlanner() {
 
   return (
     <MainLayout bgColor="bg-[#F8FAFC]">
-      <div className="planner-light min-h-[calc(100vh-5rem)] pb-20">
+      <div className="planner-light min-h-[calc(100vh-5rem)] pb-20 overflow-x-hidden">
         <div id="xp-portal" className="fixed inset-0 pointer-events-none z-[100]" />
         
         <div className="p-4 sm:p-10 max-w-[1400px] mx-auto min-h-screen">

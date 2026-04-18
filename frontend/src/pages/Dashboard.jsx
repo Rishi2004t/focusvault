@@ -264,6 +264,13 @@ export default function Dashboard() {
             <div className="mt-20 pt-12 border-t border-[var(--glass-border)] opacity-60 hover:opacity-100 transition-opacity">
               <SystemConsole onReboot={() => setRefreshKey(k => k + 1)} />
             </div>
+
+            {/* ── Version Tag for Verification ── */}
+            <div className="fixed bottom-4 left-4 z-[50] pointer-events-none">
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-500/40 bg-indigo-500/5 px-3 py-1.5 rounded-full border border-indigo-500/10 backdrop-blur-sm">
+                Neural Build: 1.5.0-Mobile-Fix
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
