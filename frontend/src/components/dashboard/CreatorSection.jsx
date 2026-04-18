@@ -56,13 +56,7 @@ export default function CreatorSection() {
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="mt-20 mb-8 px-4"
-    >
+    <div className="mt-20 mb-8 px-4">
       <div className="max-w-4xl mx-auto p-8 sm:p-12 rounded-[2.5rem] bg-[var(--bg-card)]/40 backdrop-blur-2xl border border-[var(--glass-border)] text-center relative overflow-hidden group shadow-2xl shadow-indigo-500/5">
         {/* Abstract Background Elements */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/5 blur-[120px] rounded-full group-hover:bg-indigo-500/10 transition-all duration-1000" />
@@ -101,6 +95,6 @@ export default function CreatorSection() {
           <div className="w-12 h-1 bg-gradient-to-r from-transparent via-[var(--glass-border)] to-transparent rounded-full mt-4" />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
