@@ -20,6 +20,7 @@ import DashboardQuickActions from '../components/dashboard/DashboardQuickActions
 import NeuralHeatmap from '../components/dashboard/NeuralHeatmap';
 import DashboardVideo from '../components/dashboard/DashboardVideo';
 import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
+import CreatorSection from '../components/dashboard/CreatorSection';
 
 import { 
   requestNotificationPermission, 
@@ -264,6 +265,8 @@ export default function Dashboard() {
             <div className="mt-20 pt-12 border-t border-[var(--glass-border)] opacity-60 hover:opacity-100 transition-opacity">
               <SystemConsole onReboot={() => setRefreshKey(k => k + 1)} />
             </div>
+
+            <CreatorSection />
 
             {/* ── Version Tag for Verification ── */}
             <div className="fixed bottom-4 left-4 z-[50] pointer-events-none">
