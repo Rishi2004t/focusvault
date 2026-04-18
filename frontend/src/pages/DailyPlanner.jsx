@@ -261,7 +261,6 @@ export default function DailyPlanner() {
           </section>
 
           {/* ── INTERACTIVE TABS ── */}
-          <div className="flex items-center justify-between mb-10 border-b border-slate-200/60 pb-4">
            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10 border-b border-slate-200/60 pb-6">
              <div className="flex items-center gap-6">
                 {['planner', 'history'].map(tab => (
