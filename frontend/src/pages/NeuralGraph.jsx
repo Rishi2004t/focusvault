@@ -137,10 +137,13 @@ export default function NeuralGraph() {
   return (
     <div className="w-full h-screen bg-slate-950 relative overflow-hidden">
 
-      {/* ── 3D Canvas — true full-screen ── */}
+      {/* ── 3D Canvas — adaptive scaling ── */}
       <div className="absolute inset-0 z-0">
-        <Canvas shadows camera={{ position: [0, 0, 12], fov: 55 }}>
-          <PerspectiveCamera makeDefault position={[0, 0, 12]} />
+        <Canvas shadows camera={{ position: [0, 0, window.innerWidth < 768 ? 20 : 12], fov: 55 }}>
+          <PerspectiveCamera 
+            makeDefault 
+            position={[0, 0, window.innerWidth < 768 ? 20 : 12]} 
+          />
           <ambientLight intensity={0.4} />
           <pointLight position={[10, 10, 10]} intensity={1.2} />
           <pointLight position={[-10, -10, -10]} color="#6366f1" intensity={0.8} />
@@ -161,16 +164,18 @@ export default function NeuralGraph() {
 
           <OrbitControls
             enableDamping
-            dampingFactor={0.05}
-            maxDistance={22}
+            dampingFactor={0.06}
+            maxDistance={30}
             minDistance={4}
-            enablePan={false}
+            enablePan={true}
+            autoRotate={!selectedTask}
+            autoRotateSpeed={0.5}
           />
         </Canvas>
       </div>
 
       {/* ── Floating Header ── */}
-      <div className="absolute top-6 left-6 z-10 flex items-center gap-4">
+      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10 flex items-center gap-3 sm:gap-4">
         <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 backdrop-blur-md">
           <ShieldCheck size={20} />
         </div>
@@ -182,7 +187,7 @@ export default function NeuralGraph() {
         </div>
       </div>
 
-      <div className="absolute top-6 right-6 z-10 flex gap-3">
+      <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 flex gap-2 sm:gap-3">
         <button
           onClick={() => navigate('/tasks')}
           className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest backdrop-blur-md hover:bg-white/10 transition-all"
@@ -222,11 +227,11 @@ export default function NeuralGraph() {
       <AnimatePresence>
         {selectedTask && (
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
+            initial={{ opacity: 0, y: window.innerWidth < 768 ? 100 : 0, x: window.innerWidth < 768 ? 0 : 100 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: window.innerWidth < 768 ? 100 : 0, x: window.innerWidth < 768 ? 0 : 100 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="absolute right-0 top-0 bottom-0 w-80 bg-slate-900/85 backdrop-blur-2xl border-l border-white/5 p-8 z-20 flex flex-col"
+            className="absolute bottom-0 right-0 top-auto lg:top-0 w-full lg:w-80 h-[60vh] lg:h-full bg-slate-900/90 backdrop-blur-2xl border-t lg:border-l border-white/5 p-6 sm:p-8 z-20 flex flex-col rounded-t-[2.5rem] lg:rounded-none shadow-2xl"
           >
             <div className="flex justify-between items-start mb-8">
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-black uppercase tracking-widest">
@@ -299,7 +304,7 @@ export default function NeuralGraph() {
       </AnimatePresence>
 
       {/* ── Legend ── */}
-      <div className="absolute bottom-6 left-6 z-10 flex gap-5 p-3 rounded-2xl bg-black/30 backdrop-blur-md border border-white/5">
+      <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-10 flex flex-wrap gap-3 sm:gap-5 p-3 rounded-2xl bg-black/30 backdrop-blur-md border border-white/5 max-w-[calc(100%-2rem)]">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
           <span className="text-[9px] font-black text-white/70 uppercase tracking-widest">Critical</span>
