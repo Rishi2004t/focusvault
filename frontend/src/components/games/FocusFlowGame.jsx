@@ -108,7 +108,7 @@ export default function FocusFlowGame({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <motion.div 
         initial={{ opacity: 0 }}
@@ -122,20 +122,20 @@ export default function FocusFlowGame({ isOpen, onClose }) {
       <motion.div
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        className="relative w-full max-w-4xl aspect-video bg-white/5 border border-white/10 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col"
+        className="relative w-screen h-[100dvh] sm:h-auto sm:w-full sm:max-w-4xl sm:aspect-video bg-white/5 border border-white/10 rounded-none sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col"
       >
         {/* Header UI */}
-        <div className="flex items-center justify-between p-8 border-b border-white/5 bg-white/5 backdrop-blur-md">
+        <div className="flex items-center justify-between p-4 sm:p-8 border-b border-white/5 bg-white/5 backdrop-blur-md">
           <div className="flex items-center gap-8">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Current Score</p>
-              <p className="text-3xl font-black text-white tabular-nums">{score}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Score</p>
+              <p className="text-xl sm:text-3xl font-black text-white tabular-nums">{score}</p>
             </div>
             <div className="h-10 w-[1px] bg-white/10" />
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Time Remaining</p>
-              <div className="flex items-center gap-2 text-3xl font-black text-indigo-400 tabular-nums">
-                <Clock size={24} />
+              <div className="flex items-center gap-2 text-xl sm:text-3xl font-black text-indigo-400 tabular-nums">
+                <Clock size={20} className="hidden sm:block" />
                 {timeLeft}s
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function FocusFlowGame({ isOpen, onClose }) {
         {/* Playing Field */}
         <div 
           ref={gameRef}
-          className="relative flex-1 cursor-crosshair overflow-hidden"
+          className="relative flex-1 cursor-crosshair overflow-hidden touch-none select-none"
         >
           <AnimatePresence>
             {gameState === 'IDLE' && (
@@ -189,7 +189,10 @@ export default function FocusFlowGame({ isOpen, onClose }) {
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 1.5, opacity: 0 }}
-                onClick={() => handleTargetClick(target)}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                  handleTargetClick(target);
+                }}
                 className={`absolute rounded-full border flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-90 ${
                   target.type === 'BONUS' 
                     ? 'bg-amber-400/20 border-amber-400 text-amber-400 shadow-amber-400/20' 
