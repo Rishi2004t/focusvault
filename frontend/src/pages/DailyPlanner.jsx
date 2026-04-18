@@ -326,12 +326,8 @@ export default function DailyPlanner() {
                    </div>
                 </div>
              )}
-             
-             <div className="hidden sm:flex items-center gap-4 text-slate-400">
-                 <Calendar size={14} />
-                 <span className="text-[10px] font-bold uppercase tracking-widest">Archive Integrity: Optimized</span>
-             </div>
           </div>
+        </div>
 
           {/* ── QUICK ADD SECTION ── */}
           <section className="mb-12">
