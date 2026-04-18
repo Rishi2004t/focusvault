@@ -57,11 +57,11 @@ export default function CreatorSection() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-      className="mt-32 mb-16 px-4"
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="mt-20 mb-8 px-4"
     >
       <div className="max-w-4xl mx-auto p-8 sm:p-12 rounded-[2.5rem] bg-[var(--bg-card)]/40 backdrop-blur-2xl border border-[var(--glass-border)] text-center relative overflow-hidden group shadow-2xl shadow-indigo-500/5">
         {/* Abstract Background Elements */}
