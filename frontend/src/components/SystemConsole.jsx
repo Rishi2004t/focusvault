@@ -7,7 +7,7 @@ export default function SystemConsole({ onReboot }) {
   const [logs, setLogs] = useState([]);
   const [isRebooting, setIsRebooting] = useState(false);
   const socket = useSocket();
-  const endRef = useRef(null);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     // Fetch initial logs
@@ -34,7 +34,9 @@ export default function SystemConsole({ onReboot }) {
   }, [socket]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [logs]);
 
   const handleReboot = async () => {
@@ -90,7 +92,10 @@ export default function SystemConsole({ onReboot }) {
       </div>
       
       {/* Log Output */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent pr-2 space-y-1">
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent pr-2 space-y-1"
+      >
         {logs.length === 0 ? (
           <div className="text-emerald-500/50 text-[10px] uppercase font-black tracking-widest animate-pulse h-full flex flex-col items-center justify-center">
              <Terminal size={24} className="mb-2 opacity-50" />
@@ -110,7 +115,6 @@ export default function SystemConsole({ onReboot }) {
             </div>
           );
         })}
-        <div ref={endRef} />
       </div>
     </div>
   );
