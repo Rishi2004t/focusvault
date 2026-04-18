@@ -331,19 +331,19 @@ export default function DailyPlanner() {
 
           {/* ── QUICK ADD SECTION ── */}
           <section className="mb-12">
-             <div className="bg-white/40 backdrop-blur-sm border border-slate-200/60 rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all focus-within:border-indigo-300 group">
-                <form onSubmit={handleAddTask} className="flex items-center gap-4">
-                   <div className="w-12 h-12 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-500 shadow-inner">
-                      <Plus size={24} strokeWidth={3} />
-                   </div>
-                   <input 
-                     type="text"
-                     value={title}
-                     onChange={(e) => setTitle(e.target.value)}
-                     placeholder={`Ready for ${format(selectedDate, 'EEEE')}? Launch a mission...`}
-                     className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-slate-900 placeholder:text-slate-200 placeholder:font-normal"
-                   />
-                   <div className="flex items-center gap-3">
+              <div className="bg-white/40 backdrop-blur-sm border border-slate-200/60 rounded-[2.5rem] p-4 sm:p-5 shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all focus-within:border-indigo-300 group">
+                 <form onSubmit={handleAddTask} className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="w-12 h-12 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-500 shadow-inner shrink-0">
+                       <Plus size={24} strokeWidth={3} />
+                    </div>
+                    <input 
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder={`Ready for ${format(selectedDate, 'EEEE')}? Launch mission...`}
+                      className="flex-1 w-full bg-transparent border-none outline-none text-base sm:text-lg font-bold text-slate-900 placeholder:text-slate-200 placeholder:font-normal px-2"
+                    />
+                    <div className="flex items-center justify-between w-full sm:w-auto gap-3">
                        <div className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2 flex items-center gap-2">
                           <Clock size={12} className="text-indigo-400" />
                           <input 

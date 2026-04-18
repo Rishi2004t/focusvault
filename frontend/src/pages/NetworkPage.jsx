@@ -53,11 +53,11 @@ export default function NetworkPage() {
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full opacity-10" 
              style={{ backgroundImage: 'radial-gradient(#1e293b 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-cyan-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[1000px] h-[300px] sm:h-[1000px] bg-cyan-500/5 rounded-full blur-[60px] sm:blur-[120px]" />
       </div>
 
       {/* Header UI */}
-      <div className="absolute top-8 left-8 right-8 flex justify-between items-start z-20 pointer-events-none">
+      <div className="absolute top-4 sm:top-8 left-4 sm:left-8 right-4 sm:right-8 flex flex-col sm:flex-row justify-between items-start sm:items-center z-20 pointer-events-none gap-6">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -188,7 +188,7 @@ export default function NetworkPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-sm z-30 px-6"
+            className="absolute bottom-4 sm:bottom-12 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] sm:w-full max-w-sm z-30"
           >
              <div className="p-6 rounded-[2.5rem] bg-[#0a0f18]/90 border border-white/10 backdrop-blur-2xl shadow-2xl">
                 <div className="flex justify-between items-start mb-4">

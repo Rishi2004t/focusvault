@@ -278,9 +278,9 @@ export default function NeuralIDE() {
 
   return (
     <MainLayout>
-      <div className="max-w-[1700px] mx-auto pb-20 px-6 mt-8 flex gap-6 h-[82vh]">
+      <div className="max-w-[1700px] mx-auto pb-32 px-4 sm:px-6 mt-4 sm:mt-8 flex flex-col lg:flex-row gap-6 lg:h-[82vh]">
         {/* Sidebar / Explorer */}
-        <div className="w-80 flex-shrink-0 flex flex-col gap-6">
+        <div className="w-full lg:w-80 flex-shrink-0 flex flex-col gap-6 h-[400px] lg:h-full">
           <div className="bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-6 shadow-sm flex flex-col h-full overflow-hidden">
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--glass-border)]">
               <div className="w-10 h-10 rounded-2xl bg-[var(--accent-glow)]/10 flex items-center justify-center border border-[var(--accent-glow)]/20 shadow-sm">
@@ -344,10 +344,10 @@ export default function NeuralIDE() {
         </div>
 
         {/* Main Editor Area */}
-        <div className="flex-1 flex flex-col gap-6 min-w-0">
+        <div className="flex-1 flex flex-col gap-6 min-w-0 h-[600px] lg:h-full">
           <div className="flex-1 flex flex-col bg-[var(--bg-card)] border border-[var(--glass-border)] overflow-hidden rounded-[2.5rem] shadow-sm relative">
              {/* Editor Header */}
-             <div className="h-16 border-b border-[var(--glass-border)] flex items-center justify-between px-8 bg-[var(--bg-silk)]/30 backdrop-blur-md relative z-20">
+             <div className="h-auto py-4 sm:h-16 border-b border-[var(--glass-border)] flex flex-col sm:flex-row items-center justify-between px-6 sm:px-8 bg-[var(--bg-silk)]/30 backdrop-blur-md relative z-20 gap-4">
                <div className="flex items-center gap-6">
                  <div className="flex gap-2.5">
                    <div className="w-3.5 h-3.5 rounded-full bg-rose-400/20 border border-rose-400/40" />
@@ -445,7 +445,7 @@ export default function NeuralIDE() {
           </div>
 
           {/* I/O Area */}
-          <div className="flex gap-6 h-52">
+          <div className="flex flex-col lg:flex-row gap-6 h-auto lg:h-52 mb-10 lg:mb-0">
             {/* System Output */}
             <div className="flex-1 bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-6 flex flex-col font-mono shadow-sm relative overflow-hidden">
               <div className="flex items-center justify-between mb-4 relative z-10">
@@ -489,7 +489,7 @@ export default function NeuralIDE() {
             </div>
 
             {/* Custom Input */}
-            <div className="w-80 bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-6 flex flex-col font-mono shadow-sm relative overflow-hidden">
+            <div className="w-full lg:w-80 bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-6 flex flex-col font-mono shadow-sm relative overflow-hidden h-40 lg:h-auto">
               <div className="flex items-center gap-3 mb-4 relative z-10">
                  <div className="w-8 h-8 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-500 border border-cyan-100">
                    <Keyboard size={16} />

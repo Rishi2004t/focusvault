@@ -15,7 +15,7 @@ function StatCard({ label, value, icon, change, sparkline, path, color, index, o
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * index, type: "spring", stiffness: 100 }}
       layoutId={`card-${label}`}
-      className="group cursor-pointer bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-3xl p-6 neural-card-hover relative overflow-hidden"
+      className="group cursor-pointer bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-3xl p-4 sm:p-6 neural-card-hover relative overflow-hidden"
     >
       <div className="flex justify-between items-start mb-4">
         <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"

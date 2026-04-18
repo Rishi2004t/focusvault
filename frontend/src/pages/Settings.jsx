@@ -29,7 +29,7 @@ export default function Settings() {
         {/* Header Section */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
           <div>
-            <h1 className="text-5xl font-black tracking-tighter">
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tighter">
               Advanced <span className="text-[#9dc183]">Console</span>
             </h1>
             <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-xs mt-2">
@@ -37,12 +37,12 @@ export default function Settings() {
             </p>
           </div>
           
-          <div className="flex gap-4 p-2 bg-slate-900 border border-white/5 rounded-3xl shadow-[inset_2px_2px_8px_rgba(0,0,0,0.3)]">
+          <div className="flex flex-wrap gap-2 p-1.5 sm:p-2 bg-slate-900 border border-white/5 rounded-3xl shadow-[inset_2px_2px_8px_rgba(0,0,0,0.3)]">
              {['profile', 'security', 'billing'].map(tab => (
                <button
                  key={tab}
                  onClick={() => setActiveTab(tab)}
-                 className={`px-8 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                 className={`flex-1 sm:flex-none px-4 sm:px-8 py-2 sm:py-2.5 rounded-2xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${
                    activeTab === tab 
                     ? 'bg-slate-800 text-[#9dc183] border border-white/5 shadow-[inset_-2px_-2px_6px_rgba(255,255,255,0.05),inset_2px_2px_6px_rgba(0,0,0,0.5)]' 
                     : 'text-slate-500 hover:text-slate-300'
@@ -77,11 +77,11 @@ function ProfilePanel() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Profile Details */}
         <div className="lg:col-span-2">
-          <GlassCard className="glass-card-embossed p-10 space-y-8">
-             <div className="flex items-center justify-between mb-4">
-               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.4em] flex items-center gap-3">
+          <GlassCard className="glass-card-embossed p-5 sm:p-10 space-y-8">
+             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+               <h3 className="text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-[0.4em] flex items-center gap-3">
                  <User size={16} className="text-[#9dc183]" />
-                 Neural Identity Configuration
+                 Neural Identity
                </h3>
                <div className="px-3 py-1 rounded-full bg-[#9dc183]/10 border border-[#9dc183]/20 flex items-center gap-2">
                  <Star size={12} className="text-[#9dc183] fill-current" />
@@ -200,7 +200,7 @@ function SecurityPanel() {
           </GlassCard>
 
           {/* Device Matrix */}
-          <GlassCard className="glass-card-embossed p-10">
+          <GlassCard className="glass-card-embossed p-5 sm:p-10">
              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
                <Smartphone size={16} className="text-[#9dc183]" />
                Authorized Neural Terminals
@@ -285,7 +285,7 @@ function BillingPanel() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
          {/* Plan Management */}
-         <GlassCard className="glass-card-embossed p-10 flex flex-col justify-between">
+         <GlassCard className="glass-card-embossed p-5 sm:p-10 flex flex-col justify-between">
             <div>
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.4em] mb-10 flex items-center gap-3">
                 <CreditCard size={16} className="text-purple-400" />

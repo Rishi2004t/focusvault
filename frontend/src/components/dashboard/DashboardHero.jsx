@@ -46,7 +46,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
 
            <button 
              onClick={onRefresh}
-             className="p-1.5 rounded-lg bg-[var(--bg-card)] border border-[var(--glass-border)] text-[var(--muted-text)] hover:text-[var(--accent-glow)] hover:scale-110 hover:border-[var(--accent-glow)]/50 transition-all duration-300 group"
+             className="group cursor-pointer bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-3xl p-4 sm:p-6 neural-card-hover relative overflow-hidden text-[var(--muted-text)] hover:text-[var(--accent-glow)] hover:scale-110 hover:border-[var(--accent-glow)]/50 transition-all duration-300"
              title="Manual Telemetry Sync"
            >
              <RefreshCw size={12} className="group-active:rotate-180 transition-transform duration-500" />
@@ -57,7 +57,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--primary-text)] tracking-tight italic"
+          className="text-2xl sm:text-4xl lg:text-5xl font-black text-[var(--primary-text)] tracking-tight italic"
         >
           {greeting}, <span className="text-[var(--accent-glow)] opacity-80 drop-shadow-[0_0_15px_rgba(var(--accent-color-rgb),0.5)]">{user?.name || user?.username || 'Operative'}</span>
         </motion.h1>
@@ -77,17 +77,17 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
            initial={{ opacity: 0, scale: 0.9 }}
            animate={{ opacity: 1, scale: 1 }}
            transition={{ delay: 0.3 }}
-           className="mt-8 flex flex-wrap items-center gap-4"
+           className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
         >
            <button 
              onClick={() => navigate('/focus')}
-             className="flex items-center gap-4 px-8 py-4 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-xl shadow-white/5 group relative overflow-hidden"
+             className="flex items-center justify-center gap-4 px-8 py-4 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-xl shadow-white/5 group relative overflow-hidden"
            >
               <div className="absolute inset-0 bg-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity" />
               <Play size={16} className="fill-current" /> Enter Focus Mode
            </button>
            
-           <div className="hidden sm:flex items-center gap-2 px-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest italic group hover:text-emerald-500 transition-colors">
+           <div className="flex items-center justify-center gap-2 px-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest italic group hover:text-emerald-500 transition-colors">
               <Target size={14} className="group-hover:animate-spin" /> Deep Work Protocol
            </div>
         </motion.div>

@@ -181,6 +181,17 @@
 }
 
 /* ── Daily Planner (Premium Light) Tokens ────────────────────────────────── */
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-tap-highlight-color: transparent;
+}
+
 :root {
   --planner-bg: #F8FAFC;
   --planner-card: rgba(255, 255, 255, 0.85);

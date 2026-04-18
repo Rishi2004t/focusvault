@@ -30,9 +30,9 @@ const MainLayout = ({ children, mainClassName = '' }) => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ 
                 duration: 0.5, 
-                ease: [0.4, 0, 0.2, 1], // Standard easing for premium feel
+                ease: [0.4, 0, 0.2, 1],
               }}
-              className="py-6 sm:py-8 lg:py-10 max-w-[1600px] mx-auto w-full"
+              className="py-4 sm:py-8 lg:py-10 max-w-[1600px] mx-auto w-full px-2 sm:px-0"
             >
               {children}
             </motion.div>
