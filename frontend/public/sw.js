@@ -1,6 +1,6 @@
-/* Focus Vault Neural Service Worker - V5 (Force Update) */
+/* Focus Vault Neural Service Worker - V6 (Layout Fix) */
 
-const CACHE_NAME = 'focus-vault-core-v5';
+const CACHE_NAME = 'focus-vault-core-v6';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

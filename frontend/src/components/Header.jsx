@@ -155,36 +155,36 @@ export default function Header({ onMenuClick }) {
         </div>
 
         {/* ── Right Actions ── */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           
           {/* Experience Panel Trigger */}
           <button 
             onClick={() => setIsExperiencePanelOpen(true)}
-            className="w-11 h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10"
             title="Product Experience Showcase"
           >
-            <Sparkles size={20} className="group-hover:rotate-12 transition-transform text-indigo-500" />
-            <span className="absolute top-0 right-0 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)] animate-pulse" />
+            <Sparkles size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform text-indigo-500" />
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)] animate-pulse" />
           </button>
 
           {/* Appearance Customizer */}
           <button 
             onClick={() => setIsThemeOpen(true)}
-            className="w-11 h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
             title="Neural Appearance"
           >
-            <Palette size={20} className="group-hover:rotate-12 transition-transform" />
+            <Palette size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform" />
           </button>
 
           {/* Notifications */}
           <div className="relative" ref={notifRef}>
             <button 
               onClick={() => setIsNotifOpen(!isNotifOpen)}
-              className="w-11 h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
             >
-              <Bell size={20} className="group-hover:rotate-12 transition-transform" />
+              <Bell size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform" />
               {unreadCount > 0 && (
-                 <span className="absolute -top-1 -right-1 min-w-[20px] h-[20px] px-1.5 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-black shadow-[0_0_10px_rgba(239,68,68,0.5)] border-2 border-[var(--bg-card)] animate-in fade-in zoom-in">
+                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1.5 flex items-center justify-center rounded-full bg-red-500 text-white text-[9px] font-black shadow-[0_0_10px_rgba(239,68,68,0.5)] border-2 border-[var(--bg-card)] animate-in fade-in zoom-in">
                     {unreadCount > 9 ? '9+' : unreadCount}
                  </span>
               )}
@@ -262,16 +262,16 @@ export default function Header({ onMenuClick }) {
           <div className="relative" ref={profileRef}>
             <button 
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-3 p-1.5 pl-4 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] hover:border-[var(--accent-glow)]/30 transition-all group shadow-sm shadow-slate-200/50"
+              className="flex items-center gap-2 sm:gap-3 p-1 rounded-xl sm:p-1.5 sm:pl-4 bg-[var(--bg-card)] border border-[var(--glass-border)] hover:border-[var(--accent-glow)]/30 transition-all group shadow-sm shadow-slate-200/50"
             >
-              <div className="text-right">
+              <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-[var(--primary-text)] tracking-tight">{user?.name || user?.username || 'Observer'}</p>
                 <p className="text-[9px] font-bold text-[var(--accent-glow)] uppercase tracking-widest mt-0.5">Lv {user?.productivityLevel || 1} Pro</p>
               </div>
-              <div className="w-9 h-9 rounded-lg bg-[var(--bg-silk)] flex items-center justify-center text-[var(--secondary-text)] border border-[var(--glass-border)]">
-                <User size={18} />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[var(--bg-silk)] flex items-center justify-center text-[var(--secondary-text)] border border-[var(--glass-border)]">
+                <User size={16} />
               </div>
-              <ChevronDown size={14} className={`text-[var(--muted-text)] transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown size={12} className={`text-[var(--muted-text)] transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
             </button>
 
             <AnimatePresence>

@@ -327,60 +327,66 @@ export default function DailyPlanner() {
                 </div>
              )}
           </div>
-        </div>
 
           {/* ── QUICK ADD SECTION ── */}
           <section className="mb-12">
               <div className="bg-white/40 backdrop-blur-sm border border-slate-200/60 rounded-[2.5rem] p-4 sm:p-5 shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all focus-within:border-indigo-300 group">
-                 <form onSubmit={handleAddTask} className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="w-12 h-12 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-500 shadow-inner shrink-0">
-                       <Plus size={24} strokeWidth={3} />
-                    </div>
-                    <input 
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder={`Ready for ${format(selectedDate, 'EEEE')}? Launch mission...`}
-                      className="flex-1 w-full bg-transparent border-none outline-none text-base sm:text-lg font-bold text-slate-900 placeholder:text-slate-200 placeholder:font-normal px-2"
-                    />
-                    <div className="flex items-center justify-between w-full sm:w-auto gap-3">
-                       <div className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2 flex items-center gap-2">
-                          <Clock size={12} className="text-indigo-400" />
-                          <input 
-                            type="time"
-                            value={taskTime}
-                            onChange={(e) => setTaskTime(e.target.value)}
-                            className="bg-transparent text-[11px] font-black text-slate-600 outline-none"
-                          />
-                       </div>
-                       <div className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2 flex items-center gap-2 w-48">
-                          <Hash size={12} className="text-purple-400" />
-                          <input 
-                            type="text"
-                            value={link}
-                            onChange={(e) => setLink(e.target.value)}
-                            placeholder="Action Link (URL)"
-                            className="bg-transparent text-[11px] font-bold text-slate-600 outline-none w-full placeholder:font-normal"
-                          />
-                       </div>
-                       <select 
-                         value={priority} 
-                         onChange={(e) => setPriority(e.target.value)}
-                         className="bg-slate-50/50 border border-slate-100 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 cursor-pointer outline-none hover:bg-slate-100 transition-colors"
-                       >
-                          <option value="low">P3: Minor</option>
-                          <option value="medium">P2: Tactical</option>
-                          <option value="high">P1: Critical</option>
-                       </select>
-                       <button 
-                         type="submit"
-                         disabled={!title.trim()}
-                         className="bg-indigo-600 text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-30 disabled:hover:shadow-none"
-                       >
-                         Launch Task <ArrowRight size={14} />
-                       </button>
-                   </div>
-                </form>
+                 <form onSubmit={handleAddTask} className="flex flex-col gap-5">
+                     <div className="flex items-center gap-4 w-full">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl sm:rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-500 shadow-inner shrink-0">
+                           <Plus size={24} strokeWidth={3} />
+                        </div>
+                        <input 
+                          type="text"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                          placeholder={`Ready for ${format(selectedDate, 'EEEE')}? Launch mission...`}
+                          className="flex-1 min-w-0 bg-transparent border-none outline-none text-base sm:text-lg font-bold text-slate-900 placeholder:text-slate-200 placeholder:font-normal"
+                        />
+                     </div>
+
+                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 flex-1">
+                           <div className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2.5 flex items-center gap-2">
+                              <Clock size={12} className="text-indigo-400" />
+                              <input 
+                                type="time"
+                                value={taskTime}
+                                onChange={(e) => setTaskTime(e.target.value)}
+                                className="bg-transparent text-[11px] font-black text-slate-600 outline-none w-full"
+                              />
+                           </div>
+                           <select 
+                             value={priority} 
+                             onChange={(e) => setPriority(e.target.value)}
+                             className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-500 cursor-pointer outline-none hover:bg-slate-100 transition-colors w-full"
+                           >
+                              <option value="low">P3: Minor</option>
+                              <option value="medium">P2: Tactical</option>
+                              <option value="high">P1: Critical</option>
+                           </select>
+                        </div>
+
+                        <div className="bg-slate-50/50 border border-slate-100 rounded-xl px-3 py-2.5 flex items-center gap-2 flex-1 sm:max-w-[200px]">
+                           <Hash size={12} className="text-purple-400" />
+                           <input 
+                             type="text"
+                             value={link}
+                             onChange={(e) => setLink(e.target.value)}
+                             placeholder="URL Link"
+                             className="bg-transparent text-[11px] font-bold text-slate-600 outline-none w-full placeholder:font-normal"
+                           />
+                        </div>
+
+                        <button 
+                          type="submit"
+                          disabled={!title.trim()}
+                          className="bg-indigo-600 text-white px-8 py-4 sm:py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-30 disabled:hover:shadow-none w-full sm:w-auto mt-2 sm:mt-0"
+                        >
+                          Launch Task <ArrowRight size={14} />
+                        </button>
+                     </div>
+                  </form>
              </div>
           </section>
 

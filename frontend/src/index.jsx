@@ -27,7 +27,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
-        console.log('📡 Neural Sync (SW-V5) Registered:', registration.scope);
+        console.log('📡 Neural Sync (SW-V6) Registered:', registration.scope);
       })
       .catch((error) => {
         console.error('❌ Neural Sync (SW) Registration Failed:', error);
