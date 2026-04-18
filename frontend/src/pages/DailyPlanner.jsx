@@ -14,7 +14,7 @@ import {
   Hash
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { format, isToday, isTomorrow, isPast } from 'date-fns';
+import { format, isToday, isTomorrow, isPast, addDays, isSameDay, startOfToday } from 'date-fns';
 import { toast } from 'react-hot-toast';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
@@ -28,7 +28,8 @@ export default function DailyPlanner() {
   const { registerNeuralSync } = useNotifications(isAuthenticated);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('today'); // today, tomorrow, history
+  const [activeTab, setActiveTab] = useState('planner'); // planner, history
+  const [selectedDate, setSelectedDate] = useState(startOfToday());
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('medium');
   const [taskTime, setTaskTime] = useState(format(new Date(), 'HH:mm'));
@@ -69,10 +70,8 @@ export default function DailyPlanner() {
     if (!title.trim()) return;
 
     try {
-      // Combine date and time
-      const date = activeTab === 'tomorrow' 
-        ? new Date(new Date().setDate(new Date().getDate() + 1)) 
-        : new Date();
+      // Combine selected date and time
+      const date = new Date(selectedDate);
       
       const [hours, minutes] = taskTime.split(':');
       date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
@@ -139,12 +138,13 @@ export default function DailyPlanner() {
 
   // Filtering Logic
   const filteredTasks = tasks.filter(task => {
-    if (!task.dueDate) return activeTab === 'today';
+    if (activeTab === 'history') return task.completed || (task.dueDate && isPast(new Date(task.dueDate)) && !isToday(new Date(task.dueDate)));
+    
+    if (!task.dueDate) return isToday(selectedDate) && !task.completed;
     const date = new Date(task.dueDate);
-    if (activeTab === 'today') return isToday(date) && !task.completed;
-    if (activeTab === 'tomorrow') return isTomorrow(date) && !task.completed;
-    if (activeTab === 'history') return task.completed || isPast(date);
-    return false;
+    
+    // Show tasks for the selected date that aren't completed
+    return isSameDay(date, selectedDate) && !task.completed;
   });
 
   const overdueTasks = tasks.filter(t => !t.completed && t.dueDate && new Date(t.dueDate) < new Date());
@@ -262,8 +262,9 @@ export default function DailyPlanner() {
 
           {/* ── INTERACTIVE TABS ── */}
           <div className="flex items-center justify-between mb-10 border-b border-slate-200/60 pb-4">
-             <div className="flex items-center gap-8">
-                {['today', 'tomorrow', 'history'].map(tab => (
+           <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10 border-b border-slate-200/60 pb-6">
+             <div className="flex items-center gap-6">
+                {['planner', 'history'].map(tab => (
                    <button
                      key={tab}
                      onClick={() => setActiveTab(tab)}
@@ -281,6 +282,50 @@ export default function DailyPlanner() {
                    </button>
                 ))}
              </div>
+
+             {activeTab === 'planner' && (
+                <div className="flex-1 max-w-2xl">
+                   <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2 px-1">
+                      {[...Array(14)].map((_, i) => {
+                         const date = addDays(startOfToday(), i);
+                         const isSelected = isSameDay(date, selectedDate);
+                         return (
+                            <motion.button
+                              key={i}
+                              whileHover={{ y: -2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => setSelectedDate(date)}
+                              className={`flex flex-col items-center min-w-[50px] py-3 rounded-2xl border transition-all ${
+                                 isSelected 
+                                    ? 'bg-indigo-600 border-indigo-600 shadow-lg shadow-indigo-200 text-white' 
+                                    : 'bg-white border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-400'
+                              }`}
+                            >
+                               <span className="text-[8px] font-black uppercase tracking-widest mb-1 opacity-70">
+                                  {format(date, 'EEE')}
+                               </span>
+                               <span className="text-sm font-black italic">
+                                  {format(date, 'd')}
+                               </span>
+                            </motion.button>
+                         );
+                      })}
+                      
+                      {/* Custom Date Picker Trigger */}
+                      <div className="relative group">
+                        <input 
+                          type="date"
+                          onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                          className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                        />
+                        <div className="flex flex-col items-center min-w-[50px] py-3 rounded-2xl border border-dashed border-slate-200 text-slate-300 group-hover:border-indigo-300 group-hover:text-indigo-400 transition-all">
+                           <Calendar size={14} className="mb-1" />
+                           <span className="text-[7px] font-black uppercase">More</span>
+                        </div>
+                      </div>
+                   </div>
+                </div>
+             )}
              
              <div className="hidden sm:flex items-center gap-4 text-slate-400">
                  <Calendar size={14} />
@@ -299,7 +344,7 @@ export default function DailyPlanner() {
                      type="text"
                      value={title}
                      onChange={(e) => setTitle(e.target.value)}
-                     placeholder={`Ready for ${format(new Date(), 'EEEE')}? Launch a mission...`}
+                     placeholder={`Ready for ${format(selectedDate, 'EEEE')}? Launch a mission...`}
                      className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-slate-900 placeholder:text-slate-200 placeholder:font-normal"
                    />
                    <div className="flex items-center gap-3">
