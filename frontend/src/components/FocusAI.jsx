@@ -80,7 +80,7 @@ export default function FocusAI() {
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-[60] w-16 h-16 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_50px_rgba(79,70,229,0.6)] transition-all group border border-white/20"
+          className="fixed bottom-5 right-4 z-[60] w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_50px_rgba(79,70,229,0.6)] transition-all group border border-white/20"
         >
           <div className="absolute inset-0 rounded-full bg-indigo-500 animate-ping opacity-20 group-hover:opacity-40" />
           <Bot size={28} className="relative z-10" />
@@ -95,7 +95,7 @@ export default function FocusAI() {
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 100, x: 50 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed bottom-6 right-6 z-[100] w-[400px] h-[650px] max-h-[90vh] sm:max-h-[80vh] flex flex-col bg-[#0f172a]/95 border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-2xl"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] w-[calc(100%-2rem)] sm:w-[400px] h-[650px] max-h-[90vh] sm:max-h-[80vh] flex flex-col bg-[#0f172a]/95 border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-2xl"
           >
             {/* ── HEADER ── */}
             <div className="relative flex items-center justify-between px-8 py-6 border-b border-white/5 bg-white/5">

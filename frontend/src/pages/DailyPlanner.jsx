@@ -165,7 +165,7 @@ export default function DailyPlanner() {
       <div className="planner-light min-h-[calc(100vh-5rem)] pb-20">
         <div id="xp-portal" className="fixed inset-0 pointer-events-none z-[100]" />
         
-        <div className="max-w-5xl mx-auto px-6 pt-12">
+        <div className="p-4 sm:p-10 max-w-[1400px] mx-auto min-h-screen">
           
           {/* ── HERO SECTION ── */}
           <section className="flex flex-col md:flex-row items-center justify-between gap-12 mb-16">
@@ -385,7 +385,7 @@ export default function DailyPlanner() {
           </section>
 
           {/* ── MISSIONS BOARD ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 content-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 content-start">
              <div>
                 <div className="flex items-center justify-between mb-6">
                    <div className="flex items-center gap-3">

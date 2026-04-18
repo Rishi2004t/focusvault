@@ -20,7 +20,7 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className={`group relative p-5 rounded-[2rem] border transition-all duration-300 ${
+      className={`group relative p-4 sm:p-5 rounded-[2rem] border transition-all duration-300 ${
         isCompleted 
           ? 'bg-slate-50/50 border-slate-100 opacity-70' 
           : isOverdue
@@ -29,7 +29,7 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
       }`}
     >
       {isOverdue && (
-        <div className="absolute top-4 right-10 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500 text-white text-[8px] font-black uppercase tracking-widest animate-pulse z-10">
+        <div className="absolute top-4 right-4 sm:right-10 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500 text-white text-[8px] font-black uppercase tracking-widest animate-pulse z-10">
           Overdue Mission
         </div>
       )}
@@ -128,9 +128,9 @@ export default function PlannerTaskCard({ task, onToggle, onDelete }) {
         </div>
       </div>
 
-      {/* Subtle Progress Indicator */}
+      {/* Subtle Progress Indicator — Responsive Gutters */}
       {!isCompleted && (
-        <div className="absolute bottom-0 left-10 right-10 h-[2px] bg-slate-50 overflow-hidden rounded-full">
+        <div className="absolute bottom-0 left-4 sm:left-10 right-4 sm:right-10 h-[2px] bg-slate-50 overflow-hidden rounded-full">
            <motion.div 
              initial={{ x: '-100%' }}
              whileHover={{ x: '0%' }}
