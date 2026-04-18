@@ -265,7 +265,6 @@ export default function Dashboard() {
             <div className="mt-20 pt-12 border-t border-[var(--glass-border)] opacity-60 hover:opacity-100 transition-opacity">
               <SystemConsole onReboot={() => setRefreshKey(k => k + 1)} />
             </div>
-
             <CreatorSection />
 
             {/* ── Version Tag for Verification ── */}
