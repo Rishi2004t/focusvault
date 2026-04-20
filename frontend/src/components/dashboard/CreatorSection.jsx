@@ -31,16 +31,37 @@ const GithubIcon = ({ size }) => (
   </svg>
 );
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
 const SocialLink = ({ href, icon: Icon, label, colorClass, glowClass }) => (
-  <a
+  <motion.a
+    variants={itemVariants}
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={`p-3.5 rounded-2xl bg-white/5 border border-white/10 text-[var(--muted-text)] hover:text-white transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 block ${colorClass} ${glowClass}`}
-    title={label}
+    className={`group/link relative p-4 rounded-2xl bg-white/5 border border-white/10 text-[var(--muted-text)] hover:text-white transition-all duration-300 hover:scale-[1.15] hover:-translate-y-2 block ${colorClass} ${glowClass}`}
   >
-    <Icon size={22} />
-  </a>
+    <Icon size={24} />
+    {/* Tooltip */}
+    <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-[var(--bg-card)]/95 backdrop-blur-md text-[var(--primary-text)] text-xs font-semibold rounded-lg opacity-0 group-hover/link:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-lg border border-[var(--glass-border)] z-50">
+      {label}
+      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--bg-card)]/95 border-b border-r border-[var(--glass-border)] rotate-45"></div>
+    </span>
+  </motion.a>
 );
 
 export default function CreatorSection() {
@@ -49,77 +70,125 @@ export default function CreatorSection() {
       href: "https://instagram.com/rishiiii1_", 
       icon: InstagramIcon, 
       label: "Instagram", 
-      colorClass: "hover:text-pink-500 hover:border-pink-500/30",
-      glowClass: "hover:shadow-[0_0_20px_rgba(236,72,153,0.3)]"
+      colorClass: "hover:text-pink-500 hover:border-pink-500/50",
+      glowClass: "hover:shadow-[0_0_25px_rgba(236,72,153,0.4)]"
     },
     { 
       href: "https://youtube.com/@CodingWithRishi", 
       icon: YoutubeIcon, 
       label: "YouTube", 
-      colorClass: "hover:text-red-500 hover:border-red-500/30",
-      glowClass: "hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+      colorClass: "hover:text-red-500 hover:border-red-500/50",
+      glowClass: "hover:shadow-[0_0_25px_rgba(239,68,68,0.4)]"
     },
     { 
       href: "https://linkedin.com/in/rishi-thakur-dev", 
       icon: LinkedinIcon, 
       label: "LinkedIn", 
-      colorClass: "hover:text-blue-500 hover:border-blue-500/30",
-      glowClass: "hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+      colorClass: "hover:text-blue-500 hover:border-blue-500/50",
+      glowClass: "hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]"
     },
     { 
       href: "https://github.com/Rishi2004t", 
       icon: GithubIcon, 
       label: "GitHub", 
-      colorClass: "hover:text-white hover:border-white/30",
-      glowClass: "hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+      colorClass: "hover:text-white hover:border-white/50",
+      glowClass: "hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]"
     },
     { 
       href: "https://rishithakur.portfolio.com", 
       icon: Globe, 
       label: "Portfolio", 
-      colorClass: "hover:text-indigo-400 hover:border-indigo-400/30",
-      glowClass: "hover:shadow-[0_0_20px_rgba(129,140,248,0.3)]"
+      colorClass: "hover:text-indigo-400 hover:border-indigo-400/50",
+      glowClass: "hover:shadow-[0_0_25px_rgba(129,140,248,0.4)]"
     },
   ];
 
   return (
-    <div className="mt-20 mb-8 px-4">
-      <div className="max-w-4xl mx-auto p-8 sm:p-12 rounded-[2.5rem] bg-[var(--bg-card)]/40 backdrop-blur-2xl border border-[var(--glass-border)] text-center relative overflow-hidden group shadow-2xl shadow-indigo-500/5">
-        {/* Abstract Background Elements */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/5 blur-[120px] rounded-full group-hover:bg-indigo-500/10 transition-all duration-1000" />
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[var(--accent-glow)]/5 blur-[120px] rounded-full group-hover:bg-[var(--accent-glow)]/10 transition-all duration-1000" />
+    <div className="mt-24 mb-12 px-4 relative">
+      {/* Horizontal Scrolling Marquee */}
+      <div className="w-full overflow-hidden whitespace-nowrap mb-8 opacity-60 flex select-none pointer-events-none">
+        <motion.div 
+          animate={{ x: [0, -1000] }} 
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          className="flex whitespace-nowrap text-sm font-bold tracking-widest uppercase text-[var(--muted-text)]"
+        >
+          <span className="mx-4">Built for productivity <span className="text-indigo-400 mx-4">•</span> Real-time collaboration <span className="text-indigo-400 mx-4">•</span> Focus better daily <span className="text-indigo-400 mx-4">•</span> Architecting Digital Sanctuaries for the Modern Mind <span className="text-indigo-400 mx-4">•</span></span>
+          <span className="mx-4">Built for productivity <span className="text-indigo-400 mx-4">•</span> Real-time collaboration <span className="text-indigo-400 mx-4">•</span> Focus better daily <span className="text-indigo-400 mx-4">•</span> Architecting Digital Sanctuaries for the Modern Mind <span className="text-indigo-400 mx-4">•</span></span>
+        </motion.div>
+      </div>
 
-        <div className="relative z-10 flex flex-col items-center gap-8">
+      <div className="max-w-4xl mx-auto p-10 sm:p-14 rounded-[3rem] bg-[var(--bg-card)]/40 backdrop-blur-2xl border border-[var(--glass-border)] text-center relative overflow-hidden group shadow-2xl shadow-indigo-500/10 hover:shadow-indigo-500/20 transition-all duration-700">
+        
+        {/* Animated Background Blobs */}
+        <motion.div 
+          animate={{ 
+            y: [0, -20, 0],
+            rotate: [0, 5, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-500/20 blur-[140px] rounded-full pointer-events-none" 
+        />
+        <motion.div 
+          animate={{ 
+            y: [0, 20, 0],
+            rotate: [0, -5, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -bottom-32 -left-32 w-80 h-80 bg-[var(--accent-glow)]/20 blur-[140px] rounded-full pointer-events-none" 
+        />
+
+        <div className="relative z-10 flex flex-col items-center gap-10">
           {/* Badge */}
           <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
+            initial={{ scale: 0.9, opacity: 0, y: 10 }}
+            whileInView={{ scale: 1, opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2.5 px-5 py-2 bg-[var(--bg-silk)]/80 border border-[var(--glass-border)] rounded-full text-[var(--primary-text)] text-[10px] font-black uppercase tracking-[0.25em] italic shadow-sm"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="flex items-center gap-2.5 px-6 py-2.5 bg-[var(--bg-silk)]/80 border border-[var(--glass-border)] rounded-full text-[var(--primary-text)] text-[11px] font-black uppercase tracking-[0.25em] italic shadow-md hover:shadow-rose-500/10 hover:border-rose-500/20 transition-all duration-300"
           >
             <Heart size={14} className="text-rose-500 fill-rose-500/20 animate-pulse" />
             Made with ❤️ by Rishi
           </motion.div>
 
           {/* Text Content */}
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-black text-[var(--primary-text)] leading-tight tracking-tight italic mb-6">
-              Crafted to help you collaborate, focus, and build better every day <span className="not-italic">🚀</span>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="max-w-3xl mx-auto"
+          >
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight italic mb-8 bg-gradient-to-br from-white via-indigo-100 to-indigo-400 bg-clip-text text-transparent drop-shadow-sm pb-2">
+              Crafted to help you collaborate, focus, and build better every day <span className="not-italic text-white">🚀</span>
             </h2>
-            <p className="text-[var(--muted-text)] font-bold text-[11px] uppercase tracking-[0.4em] leading-relaxed opacity-70">
+            <p className="text-[var(--muted-text)] font-semibold text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.5em] leading-relaxed opacity-80 decoration-indigo-500/30 underline decoration-wavy underline-offset-8">
               Architecting Digital Sanctuaries for the Modern Mind
             </p>
-          </div>
+          </motion.div>
 
           {/* Social Links */}
-          <div className="flex flex-wrap justify-center gap-5 mt-4">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-5 sm:gap-6 mt-6 pt-2"
+          >
             {socials.map((social, index) => (
               <SocialLink key={index} {...social} />
             ))}
-          </div>
+          </motion.div>
 
           {/* Bottom decorative line */}
-          <div className="w-12 h-1 bg-gradient-to-r from-transparent via-[var(--glass-border)] to-transparent rounded-full mt-4" />
+          <motion.div 
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="w-24 h-1.5 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent rounded-full mt-6" 
+          />
         </div>
       </div>
     </div>
