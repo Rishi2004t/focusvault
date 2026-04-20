@@ -47,19 +47,19 @@ const itemVariants = {
   show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 24 } }
 };
 
-const SocialLink = ({ href, icon: Icon, label, colorClass, glowClass }) => (
+const SocialLink = ({ href, icon: Icon, label, baseColorClass, hoverColorClass, glowClass }) => (
   <motion.a
     variants={itemVariants}
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={`group/link relative p-4 rounded-2xl bg-white/5 border border-white/10 text-[var(--muted-text)] hover:text-white transition-all duration-300 hover:scale-[1.15] hover:-translate-y-2 block ${colorClass} ${glowClass}`}
+    className={`group/link relative p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:scale-[1.15] hover:-translate-y-2 block ${baseColorClass} ${hoverColorClass} ${glowClass}`}
   >
     <Icon size={24} />
     {/* Tooltip */}
-    <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-[var(--bg-card)]/95 backdrop-blur-md text-[var(--primary-text)] text-xs font-semibold rounded-lg opacity-0 group-hover/link:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-lg border border-[var(--glass-border)] z-50">
+    <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-900 backdrop-blur-md text-white text-xs font-semibold rounded-lg opacity-0 group-hover/link:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-lg z-50">
       {label}
-      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--bg-card)]/95 border-b border-r border-[var(--glass-border)] rotate-45"></div>
+      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
     </span>
   </motion.a>
 );
@@ -70,54 +70,59 @@ export default function CreatorSection() {
       href: "https://instagram.com/rishiiii1_", 
       icon: InstagramIcon, 
       label: "Instagram", 
-      colorClass: "hover:text-pink-500 hover:border-pink-500/50",
-      glowClass: "hover:shadow-[0_0_25px_rgba(236,72,153,0.4)]"
+      baseColorClass: "text-pink-500",
+      hoverColorClass: "hover:bg-gradient-to-tr hover:from-pink-500 hover:to-orange-400 hover:text-white hover:border-transparent",
+      glowClass: "hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
     },
     { 
       href: "https://youtube.com/@CodingWithRishi", 
       icon: YoutubeIcon, 
       label: "YouTube", 
-      colorClass: "hover:text-red-500 hover:border-red-500/50",
-      glowClass: "hover:shadow-[0_0_25px_rgba(239,68,68,0.4)]"
+      baseColorClass: "text-red-500",
+      hoverColorClass: "hover:bg-red-500 hover:text-white hover:border-red-500",
+      glowClass: "hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]"
     },
     { 
       href: "https://linkedin.com/in/rishi-thakur-dev", 
       icon: LinkedinIcon, 
       label: "LinkedIn", 
-      colorClass: "hover:text-blue-500 hover:border-blue-500/50",
-      glowClass: "hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]"
+      baseColorClass: "text-blue-600",
+      hoverColorClass: "hover:bg-blue-600 hover:text-white hover:border-blue-600",
+      glowClass: "hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
     },
     { 
       href: "https://github.com/Rishi2004t", 
       icon: GithubIcon, 
       label: "GitHub", 
-      colorClass: "hover:text-white hover:border-white/50",
-      glowClass: "hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]"
+      baseColorClass: "text-slate-800",
+      hoverColorClass: "hover:bg-slate-800 hover:text-white hover:border-slate-800",
+      glowClass: "hover:shadow-[0_0_20px_rgba(30,41,59,0.3)]"
     },
     { 
       href: "https://rishithakur.portfolio.com", 
       icon: Globe, 
       label: "Portfolio", 
-      colorClass: "hover:text-indigo-400 hover:border-indigo-400/50",
-      glowClass: "hover:shadow-[0_0_25px_rgba(129,140,248,0.4)]"
+      baseColorClass: "text-indigo-500",
+      hoverColorClass: "hover:bg-indigo-500 hover:text-white hover:border-indigo-500",
+      glowClass: "hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]"
     },
   ];
 
   return (
-    <div className="mt-24 mb-12 px-4 relative">
+    <div className="mt-28 mb-16 px-4 relative">
       {/* Horizontal Scrolling Marquee */}
-      <div className="w-full overflow-hidden whitespace-nowrap mb-8 opacity-60 flex select-none pointer-events-none">
+      <div className="w-full overflow-hidden whitespace-nowrap mb-10 opacity-70 flex select-none pointer-events-none">
         <motion.div 
           animate={{ x: [0, -1000] }} 
           transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="flex whitespace-nowrap text-sm font-bold tracking-widest uppercase text-[var(--muted-text)]"
+          className="flex whitespace-nowrap text-sm font-bold tracking-widest uppercase text-slate-500"
         >
           <span className="mx-4">Built for productivity <span className="text-indigo-400 mx-4">•</span> Real-time collaboration <span className="text-indigo-400 mx-4">•</span> Focus better daily <span className="text-indigo-400 mx-4">•</span> Architecting Digital Sanctuaries for the Modern Mind <span className="text-indigo-400 mx-4">•</span></span>
           <span className="mx-4">Built for productivity <span className="text-indigo-400 mx-4">•</span> Real-time collaboration <span className="text-indigo-400 mx-4">•</span> Focus better daily <span className="text-indigo-400 mx-4">•</span> Architecting Digital Sanctuaries for the Modern Mind <span className="text-indigo-400 mx-4">•</span></span>
         </motion.div>
       </div>
 
-      <div className="max-w-4xl mx-auto p-10 sm:p-14 rounded-[3rem] bg-[var(--bg-card)]/40 backdrop-blur-2xl border border-[var(--glass-border)] text-center relative overflow-hidden group shadow-2xl shadow-indigo-500/10 hover:shadow-indigo-500/20 transition-all duration-700">
+      <div className="max-w-4xl mx-auto p-10 sm:p-14 rounded-[3rem] bg-[#f8fafc] backdrop-blur-2xl border border-white/80 text-center relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] transition-all duration-700">
         
         {/* Animated Background Blobs */}
         <motion.div 
@@ -127,7 +132,7 @@ export default function CreatorSection() {
             scale: [1, 1.05, 1]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-500/20 blur-[140px] rounded-full pointer-events-none" 
+          className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-200/40 blur-[100px] rounded-full pointer-events-none" 
         />
         <motion.div 
           animate={{ 
@@ -136,17 +141,17 @@ export default function CreatorSection() {
             scale: [1, 1.05, 1]
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute -bottom-32 -left-32 w-80 h-80 bg-[var(--accent-glow)]/20 blur-[140px] rounded-full pointer-events-none" 
+          className="absolute -bottom-32 -left-32 w-80 h-80 bg-sky-200/40 blur-[100px] rounded-full pointer-events-none" 
         />
 
-        <div className="relative z-10 flex flex-col items-center gap-10">
+        <div className="relative z-10 flex flex-col items-center gap-8">
           {/* Badge */}
           <motion.div 
             initial={{ scale: 0.9, opacity: 0, y: 10 }}
             whileInView={{ scale: 1, opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex items-center gap-2.5 px-6 py-2.5 bg-[var(--bg-silk)]/80 border border-[var(--glass-border)] rounded-full text-[var(--primary-text)] text-[11px] font-black uppercase tracking-[0.25em] italic shadow-md hover:shadow-rose-500/10 hover:border-rose-500/20 transition-all duration-300"
+            className="flex items-center gap-2.5 px-6 py-2.5 bg-white border border-slate-100 rounded-full text-slate-800 text-[11px] font-black uppercase tracking-[0.25em] italic shadow-sm hover:shadow-md transition-all duration-300"
           >
             <Heart size={14} className="text-rose-500 fill-rose-500/20 animate-pulse" />
             Made with ❤️ by Rishi
@@ -158,14 +163,23 @@ export default function CreatorSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="max-w-3xl mx-auto"
+            className="max-w-3xl mx-auto flex flex-col items-center"
           >
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight italic mb-8 bg-gradient-to-br from-white via-indigo-100 to-indigo-400 bg-clip-text text-transparent drop-shadow-sm pb-2">
-              Crafted to help you collaborate, focus, and build better every day <span className="not-italic text-white">🚀</span>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight italic mb-6 bg-gradient-to-br from-[#0f172a] to-indigo-900 bg-clip-text text-transparent drop-shadow-sm pb-2">
+              Crafted to help you collaborate, focus, and build better every day <span className="not-italic opacity-90 inline-block drop-shadow-md">🚀</span>
             </h2>
-            <p className="text-[var(--muted-text)] font-semibold text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.5em] leading-relaxed opacity-80 decoration-indigo-500/30 underline decoration-wavy underline-offset-8">
+            <p className="text-slate-600 font-bold text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.5em] leading-relaxed decoration-indigo-300/50 underline decoration-wavy underline-offset-8">
               Architecting Digital Sanctuaries for the Modern Mind
             </p>
+
+            {/* Divider below subtitle */}
+            <motion.div 
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="w-32 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent mt-10 mb-2" 
+            />
           </motion.div>
 
           {/* Social Links */}
@@ -174,7 +188,7 @@ export default function CreatorSection() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-5 sm:gap-6 mt-6 pt-2"
+            className="flex flex-wrap justify-center gap-5 sm:gap-6 mt-4 pt-2"
           >
             {socials.map((social, index) => (
               <SocialLink key={index} {...social} />
@@ -187,7 +201,7 @@ export default function CreatorSection() {
             whileInView={{ scaleX: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="w-24 h-1.5 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent rounded-full mt-6" 
+            className="w-24 h-1.5 bg-gradient-to-r from-transparent via-indigo-200 to-transparent rounded-full mt-6" 
           />
         </div>
       </div>
