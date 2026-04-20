@@ -21,6 +21,7 @@ import NeuralHeatmap from '../components/dashboard/NeuralHeatmap';
 import DashboardVideo from '../components/dashboard/DashboardVideo';
 import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
 import CreatorSection from '../components/dashboard/CreatorSection';
+import FocusHeatmap from '../components/dashboard/FocusHeatmap';
 
 import { 
   requestNotificationPermission, 
@@ -200,6 +201,10 @@ export default function Dashboard() {
             
             <div className="mt-12 sm:mt-16">
               <NeuralHeatmap />
+            </div>
+
+            <div className="mt-12 sm:mt-16">
+              <FocusHeatmap />
             </div>
 
             <div className="mt-12 sm:mt-16 mb-20">
