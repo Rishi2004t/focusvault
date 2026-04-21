@@ -135,7 +135,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
       </div>
 
       {/* Experience Tracker Card */}
-      <div className="w-full xl:w-96 p-6 sm:p-8 rounded-[2.5rem] bg-[var(--bg-card)] border border-[var(--glass-border)] backdrop-blur-xl shadow-2xl shadow-black/20 relative overflow-hidden group hover:shadow-[var(--accent-glow)]/10 hover:border-[var(--accent-glow)]/40 transition-all duration-500 hover:-translate-y-1 cursor-pointer">
+      <div className="w-full xl:w-96 p-6 sm:p-8 rounded-[2.5rem] bg-[var(--bg-card)]/40 backdrop-blur-xl border border-[var(--glass-border)] shadow-premium relative overflow-hidden group hover:shadow-[var(--accent-glow)]/10 hover:border-[var(--accent-glow)]/40 transition-all duration-500 hover:-translate-y-1 will-change-transform cursor-pointer">
         {/* Animated Glow Grid */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-500" 
              style={{ backgroundImage: 'radial-gradient(var(--accent-glow) 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
@@ -157,7 +157,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
               <motion.span
                 key={user?.xp}
                 initial={{ opacity: 0, scale: 0.5, y: 0 }}
-                animate={{ opacity: 1, scale: 1, y: -40 }}
+                animate={{ opacity: 1, scale: 1, y: -30 }}
                 exit={{ opacity: 0 }}
                 className="absolute left-0 text-[var(--accent-glow)] font-black italic text-lg pointer-events-none drop-shadow-[0_0_10px_var(--accent-glow)]"
               >

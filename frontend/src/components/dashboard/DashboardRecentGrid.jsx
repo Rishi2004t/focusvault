@@ -17,7 +17,8 @@ function RecentPanel({ title, icon, color, items = [], type, path }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-8 shadow-2xl shadow-[var(--accent-glow)]/5 flex flex-col h-full transition-all duration-500 hover:border-[var(--accent-glow)]/50 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(var(--accent-color-rgb),0.3)] group/panel relative overflow-hidden">
+  return (
+    <div className="glass-card p-6 sm:p-8 flex flex-col h-full transition-all duration-500 hover:border-[var(--accent-glow)]/40 hover:-translate-y-1 hover:shadow-xl group/panel will-change-transform cursor-default">
       {/* Subtle Glow */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent-glow)]/5 blur-3xl group-hover/panel:bg-[var(--accent-glow)]/20 transition-colors duration-700 pointer-events-none" />
       
@@ -65,7 +66,7 @@ function RecentPanel({ title, icon, color, items = [], type, path }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.05 * i }}
             onClick={() => navigate(type === 'note' ? `/notes/${item._id}` : path)}
-            className="group flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-silk)]/50 border border-transparent hover:border-[var(--glass-border)] hover:bg-[var(--bg-card)] hover:shadow-lg hover:shadow-[var(--accent-glow)]/5 transition-all cursor-pointer"
+            className="group flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-silk)]/30 backdrop-blur-sm border border-[var(--glass-border)]/50 hover:border-[var(--accent-glow)]/30 hover:bg-[var(--bg-card)]/60 hover:shadow-premium transition-all duration-300 active:scale-[0.98] cursor-pointer will-change-transform"
           >
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center shrink-0 shadow-sm transition-colors group-hover:bg-[var(--bg-silk)]">

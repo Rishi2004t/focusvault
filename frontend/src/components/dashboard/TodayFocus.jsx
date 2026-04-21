@@ -45,7 +45,8 @@ export default function TodayFocus({ tasks = [], onToggle }) {
   };
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-3xl p-8 shadow-xl shadow-[var(--accent-glow)]/5 h-full relative overflow-hidden group hover:border-[var(--accent-glow)]/30 transition-all duration-500 hover:shadow-[var(--accent-glow)]/20 hover:-translate-y-1">
+  return (
+    <div className="glass-card p-6 sm:p-8 h-full group hover:shadow-[var(--accent-glow)]/10 transition-all duration-500 will-change-transform">
       {/* Background Accent */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--accent-glow)]/10 to-transparent blur-[80px] -mr-32 -mt-32 pointer-events-none transition-all duration-700 group-hover:from-[var(--accent-glow)]/20" />
       
@@ -73,11 +74,11 @@ export default function TodayFocus({ tasks = [], onToggle }) {
            <span className="text-[9px] font-bold uppercase text-[var(--muted-text)]">Mission Progress</span>
            <span className="text-[9px] font-black text-[var(--accent-glow)]">{progressPercent}%</span>
         </div>
-        <div className="h-1.5 w-full bg-[var(--bg-silk)] rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-black/5 rounded-full overflow-hidden">
            <motion.div 
              initial={{ width: 0 }}
              animate={{ width: `${progressPercent}%` }}
-             className="h-full bg-[var(--accent-glow)] rounded-full"
+             className="h-full bg-gradient-to-r from-[var(--accent-glow)] to-[var(--accent-secondary)] rounded-full relative z-10 shadow-[0_0_10px_var(--accent-glow)]/30"
            />
         </div>
       </div>
@@ -102,7 +103,7 @@ export default function TodayFocus({ tasks = [], onToggle }) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: i * 0.1 }}
-                className="group/item relative p-5 rounded-2xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] hover:bg-[var(--bg-card)] hover:border-[var(--accent-glow)]/40 hover:shadow-[0_4px_20px_rgba(var(--accent-color-rgb),0.1)] hover:-translate-y-0.5 transition-all duration-300"
+                className="group/item relative p-4 sm:p-5 rounded-2xl bg-[var(--bg-silk)]/40 backdrop-blur-md border border-[var(--glass-border)] hover:bg-[var(--bg-card)]/60 hover:shadow-premium hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] will-change-transform"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">

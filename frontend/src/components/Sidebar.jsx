@@ -51,8 +51,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </AnimatePresence>
 
       <div className={`
-        w-72 h-screen fixed left-0 top-0 z-[60] flex flex-col p-6 bg-[var(--bg-silk)] border-r border-[var(--glass-border)] 
-        shadow-[4px_0_24px_rgba(0,0,0,0.01)] overflow-hidden transition-transform duration-500
+        w-72 h-screen fixed left-0 top-0 z-[60] flex flex-col p-6 bg-[var(--bg-silk)]/40 backdrop-blur-xl border-r border-[var(--glass-border)] 
+        shadow-premium overflow-hidden transition-transform duration-500 will-change-transform
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* ── Brand Header ── */}
@@ -76,8 +76,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               className={({ isActive }) => `
                 flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-300 group relative
                 ${isActive 
-                  ? 'bg-[var(--bg-card)] text-[var(--nav-active-text)] shadow-sm border border-[var(--glass-border)]' 
-                  : 'text-[var(--secondary-text)] hover:bg-[var(--bg-card)]/50 hover:text-[var(--primary-text)]'
+                  ? 'bg-[var(--bg-card)]/60 backdrop-blur-md text-[var(--nav-active-text)] shadow-sm border border-[var(--glass-border)]' 
+                  : 'text-[var(--secondary-text)] hover:bg-[var(--bg-card)]/30 hover:text-[var(--primary-text)]'
                 }
               `}
             >
@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         {/* ── Security / Profile ── */}
         <div className="mt-auto pt-8 border-t border-[var(--glass-border)] space-y-4">
-          <div className="bg-[var(--bg-card)] rounded-2xl p-5 border border-[var(--glass-border)] shadow-sm hidden sm:block">
+          <div className="bg-[var(--bg-card)]/40 backdrop-blur-md rounded-2xl p-5 border border-[var(--glass-border)] shadow-sm hidden sm:block">
              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[var(--accent-glow)]/10 flex items-center justify-center text-[var(--accent-glow)]">
                   <ShieldCheck size={20} />
@@ -118,7 +118,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <span>XP Progress</span>
                   <span className="text-[var(--primary-text)]">{user?.xp || 0} / {(user?.productivityLevel || 1) * 500}</span>
                 </div>
-                <div className="h-1.5 w-full bg-[var(--bg-silk)] rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[var(--bg-silk)]/30 rounded-full overflow-hidden">
                   <motion.div 
                      initial={{ width: 0 }}
                      animate={{ width: `${((user?.xp || 0) % 500) / 5}%` }}

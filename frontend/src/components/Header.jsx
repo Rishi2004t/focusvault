@@ -92,7 +92,7 @@ export default function Header({ onMenuClick }) {
   
   return (
     <>
-      <header className="h-20 fixed top-0 right-0 lg:left-72 left-0 z-40 px-4 lg:px-8 flex items-center justify-between bg-[var(--bg-card)]/80 backdrop-blur-md border-b border-[var(--glass-border)] shadow-[0_2px_24px_rgba(0,0,0,0.02)] transition-all duration-500">
+      <header className="h-20 fixed top-0 right-0 lg:left-72 left-0 z-40 px-4 lg:px-8 flex items-center justify-between bg-[var(--bg-card)]/60 backdrop-blur-xl border-b border-[var(--glass-border)] shadow-premium transition-all duration-500">
         
         {/* ── Mobile Menu Toggle ── */}
         <button 
@@ -111,7 +111,7 @@ export default function Header({ onMenuClick }) {
               placeholder="Search neural notes, tasks, files..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-xl py-2.5 pl-12 pr-4 text-sm text-[var(--primary-text)] placeholder:text-[var(--muted-text)] focus:outline-none focus:border-[var(--accent-glow)]/50 focus:ring-4 focus:ring-[var(--accent-glow)]/5 transition-all"
+              className="w-full bg-[var(--bg-silk)]/60 backdrop-blur-md border border-[var(--glass-border)] rounded-xl py-2.5 pl-12 pr-4 text-sm text-[var(--primary-text)] placeholder:text-[var(--muted-text)] focus:outline-none focus:border-[var(--accent-glow)]/50 focus:ring-4 focus:ring-[var(--accent-glow)]/5 transition-all"
             />
           </div>
 
@@ -119,10 +119,10 @@ export default function Header({ onMenuClick }) {
           <AnimatePresence>
             {(searchQuery.length > 0 || isSearching) && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full left-0 right-0 mt-3 bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-2xl shadow-2xl shadow-[var(--accent-glow)]/5 overflow-hidden"
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                className="absolute top-full left-0 right-0 mt-3 bg-[var(--bg-card)]/90 backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl shadow-2xl shadow-black/10 overflow-hidden z-50 overflow-y-auto max-h-[60vh] custom-scrollbar"
               >
                 {isSearching ? (
                   <div className="p-8 text-center text-[var(--muted-text)] text-xs font-bold animate-pulse uppercase tracking-widest">Scanning Vault...</div>
@@ -160,7 +160,7 @@ export default function Header({ onMenuClick }) {
           {/* Experience Panel Trigger */}
           <button 
             onClick={() => setIsExperiencePanelOpen(true)}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 hover:-translate-y-0.5 active:scale-95 transition-all relative group shadow-sm bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10"
             title="Product Experience Showcase"
           >
             <Sparkles size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform text-indigo-500" />
@@ -170,7 +170,7 @@ export default function Header({ onMenuClick }) {
           {/* Appearance Customizer */}
           <button 
             onClick={() => setIsThemeOpen(true)}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 hover:-translate-y-0.5 active:scale-95 transition-all relative group shadow-sm"
             title="Neural Appearance"
           >
             <Palette size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform" />
@@ -180,7 +180,7 @@ export default function Header({ onMenuClick }) {
           <div className="relative" ref={notifRef}>
             <button 
               onClick={() => setIsNotifOpen(!isNotifOpen)}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 transition-all relative group shadow-sm"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[var(--bg-card)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--secondary-text)] hover:text-[var(--accent-glow)] hover:border-[var(--accent-glow)]/30 hover:-translate-y-0.5 active:scale-95 transition-all relative group shadow-sm"
             >
               <Bell size={18} className="sm:size-[20px] group-hover:rotate-12 transition-transform" />
               {unreadCount > 0 && (
@@ -196,7 +196,7 @@ export default function Header({ onMenuClick }) {
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute top-full right-0 mt-3 w-80 bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-2xl shadow-2xl shadow-slate-200/50 p-4"
+                  className="absolute top-full right-0 mt-3 w-80 bg-[var(--bg-card)]/90 backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl shadow-2xl shadow-black/10 p-4 z-50"
                 >
                   <div className="flex items-center justify-between mb-4 px-2">
                     <h4 className="text-[10px] font-black tracking-widest text-[var(--muted-text)] uppercase text-indigo-500">Intelligence Feed</h4>
