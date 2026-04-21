@@ -26,6 +26,7 @@ import NeuralIDE from './pages/NeuralIDE';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import SoulVault from './pages/SoulVault';
+import DailyReplay from './pages/DailyReplay';
 import LoadingSpinner from './components/LoadingSpinner';
 import FocusAI from './components/FocusAI';
 import { useNotifications } from './hooks/useNotifications';
@@ -219,6 +220,15 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <SoulVault />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/replay"
+        element={
+          <PrivateRoute>
+            <DailyReplay />
           </PrivateRoute>
         }
       />

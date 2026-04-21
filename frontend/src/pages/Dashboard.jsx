@@ -22,6 +22,7 @@ import DashboardVideo from '../components/dashboard/DashboardVideo';
 import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
 import CreatorSection from '../components/dashboard/CreatorSection';
 import FocusHeatmap from '../components/dashboard/FocusHeatmap';
+import AICoachInsights from '../components/dashboard/AICoachInsights';
 
 import { 
   requestNotificationPermission, 
@@ -206,6 +207,9 @@ export default function Dashboard() {
             <div className="mt-12 sm:mt-16">
               <FocusHeatmap />
             </div>
+
+            {/* ── AI Coach Insights ── */}
+            <AICoachInsights />
 
             <div className="mt-12 sm:mt-16 mb-20">
               <div className="flex items-center gap-3 mb-8">
