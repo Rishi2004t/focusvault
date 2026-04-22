@@ -298,9 +298,9 @@ function AddSnippetModal({ onAdd, onClose, loading }) {
         exit={{ opacity: 0, scale: 0.92 }}
         className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-8 shadow-2xl"
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 relative z-[20]">
           <h2 className="font-black text-[var(--primary-text)]">Add Code Snippet</h2>
-          <button onClick={onClose}><X size={18} className="text-[var(--muted-text)] hover:text-[var(--primary-text)] transition-colors" /></button>
+          <button type="button" onClick={onClose} className="p-2 -mr-2"><X size={18} className="text-[var(--muted-text)] hover:text-[var(--primary-text)] transition-colors" /></button>
         </div>
         <div className="space-y-4">
           <input
@@ -322,8 +322,16 @@ function AddSnippetModal({ onAdd, onClose, loading }) {
             className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-mono outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)] resize-none h-48 md:h-64"
           />
           <button
-            onClick={() => onAdd(form)} disabled={loading || !form.title || !form.code}
-            className="w-full py-3.5 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-xs uppercase tracking-widest disabled:opacity-50 shadow-lg"
+            type="button"
+            onClick={() => {
+              console.log('--- DEBUG: SNIPPET SAVE START ---');
+              console.log('Title:', form.title);
+              console.log('Language:', form.language);
+              console.log('Code Length:', form.code?.length);
+              onAdd(form);
+            }}
+            disabled={loading || !form.title || !form.code}
+            className="w-full py-4 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-xs uppercase tracking-widest disabled:opacity-50 shadow-lg relative z-[30] active:scale-95 transition-transform"
           >
             {loading ? 'Encrypting...' : 'Add to Vault →'}
           </button>
@@ -383,14 +391,20 @@ function Workspace({ team, userId, userName, socket, onLeave, onRefresh }) {
   };
 
   const addSnippet = async (form) => {
+    console.log('🚀 Triggering snippet save for Team:', team._id);
     setSnipLoad(true);
     try {
-      await api.post(`/teams/${team._id}/snippet`, form);
+      const response = await api.post(`/teams/${team._id}/snippet`, form);
+      console.log('✅ Snippet Save Response:', response.data);
       toast.success('Snippet added to vault!');
       setShowSnip(false);
       onRefresh();
       setLogs(prev => [...prev, { type: 'SNIPPET_ADD', message: `"${form.title}" added to Code Vault.` }]);
-    } catch { toast.error('Snippet failed'); }
+    } catch (error) {
+      console.error('❌ Snippet Save Error:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Snippet synchronization failed';
+      toast.error(errorMsg);
+    }
     finally { setSnipLoad(false); }
   };
 
