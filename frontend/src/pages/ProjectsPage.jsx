@@ -195,7 +195,7 @@ function EntryScreen({ onCreate, onJoin, loading }) {
                 whileTap={{ scale: 0.97 }}
                 onClick={() => { onJoin(accessKey); setAccessKey(''); }}
                 disabled={loading || !accessKey.trim()}
-                className="w-full py-3.5 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                className="w-full py-3.5 rounded-2xl bg-[#6366f1] text-white font-black text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition-all hover:bg-[#4f46e5]"
               >
                 {loading ? 'Syncing...' : 'Connect to Squad →'}
               </motion.button>
@@ -319,8 +319,7 @@ function AddSnippetModal({ onAdd, onClose, loading }) {
           <textarea
             value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))}
             placeholder="// Paste your critical logic here..."
-            rows={8}
-            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-mono outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)] resize-none"
+            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-mono outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)] resize-none h-48 md:h-64"
           />
           <button
             onClick={() => onAdd(form)} disabled={loading || !form.title || !form.code}
@@ -414,13 +413,13 @@ function Workspace({ team, userId, userName, socket, onLeave, onRefresh }) {
   return (
     <>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-[var(--accent-glow)]/10 border border-[var(--accent-glow)]/20 flex items-center justify-center shadow-sm">
             <Users size={22} className="text-[var(--accent-glow)]" />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-[var(--primary-text)] tracking-tight">{team.teamName}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-[var(--primary-text)] tracking-tight">{team.teamName}</h1>
             <div className="flex items-center gap-3 mt-1">
               <span className="text-[9px] font-black uppercase tracking-widest text-[var(--muted-text)]">
                 {team.members.length} Members
@@ -431,16 +430,16 @@ function Workspace({ team, userId, userName, socket, onLeave, onRefresh }) {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={() => setShowKey(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] text-xs font-black uppercase tracking-widest hover:border-[var(--accent-glow)]/40 hover:text-[var(--accent-glow)] transition-all shadow-sm"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--glass-border)] text-[10px] sm:text-xs font-black uppercase tracking-widest hover:border-[var(--accent-glow)]/40 hover:text-[var(--accent-glow)] transition-all shadow-sm"
           >
             <Lock size={14} /> Manage Access
           </button>
           <button
             onClick={onLeave}
-            className="p-2.5 rounded-2xl bg-rose-50 border border-rose-100 text-rose-500 hover:bg-rose-100 transition-all shadow-sm"
+            className="p-2.5 rounded-2xl bg-rose-50 border border-rose-100 text-rose-500 hover:bg-rose-100 transition-all shadow-sm flex-shrink-0"
           >
             <LogOut size={16} />
           </button>
@@ -516,16 +515,28 @@ function Workspace({ team, userId, userName, socket, onLeave, onRefresh }) {
               <div className="space-y-3">
                 {team.codeSnippets.slice(-4).map((s, i) => (
                   <div key={i} className="rounded-2xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--glass-border)]">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-2.5 border-b border-[var(--glass-border)] gap-2">
                       <div className="flex items-center gap-2">
                         <FileCode size={13} className="text-[var(--accent-glow)]" />
-                        <span className="text-xs font-bold text-[var(--primary-text)]">{s.title}</span>
+                        <span className="text-xs font-bold text-[var(--primary-text)] truncate">{s.title}</span>
                       </div>
-                      <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-lg border ${LANG_COLORS[s.language] || 'text-[var(--muted-text)] bg-[var(--bg-card)] border-[var(--glass-border)]'}`}>
-                        {s.language}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-lg border ${LANG_COLORS[s.language] || 'text-[var(--muted-text)] bg-[var(--bg-card)] border-[var(--glass-border)]'}`}>
+                          {s.language}
+                        </span>
+                        <button 
+                          onClick={() => {
+                            navigator.clipboard.writeText(s.code);
+                            toast.success('Snippet copied!');
+                          }}
+                          className="p-1.5 rounded-lg hover:bg-[var(--accent-glow)]/10 text-[var(--muted-text)] hover:text-[var(--accent-glow)] transition-all"
+                          title="Copy Code"
+                        >
+                          <Copy size={12} />
+                        </button>
+                      </div>
                     </div>
-                    <pre className="text-[10px] text-[var(--secondary-text)] font-mono overflow-x-auto px-4 py-3 max-h-[100px] leading-relaxed">
+                    <pre className="text-[10px] text-[var(--secondary-text)] font-mono overflow-x-auto px-4 py-3 max-h-[120px] leading-relaxed custom-scrollbar">
                       {s.code}
                     </pre>
                   </div>
