@@ -291,26 +291,30 @@ function AccessKeyModal({ team, userId, onClose, onRemove, onRegen }) {
 function AddSnippetModal({ onAdd, onClose, loading }) {
   const [form, setForm] = useState({ title: '', language: 'javascript', code: '' });
   return (
-    <div className="fixed inset-0 bg-slate-900/10 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
       <motion.div
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.92 }}
-        className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-8 shadow-2xl"
+        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: 20 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-xl bg-[var(--bg-card)] border border-[var(--glass-border)] rounded-[2.5rem] p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto pointer-events-auto"
       >
         <div className="flex items-center justify-between mb-6 relative z-[20]">
           <h2 className="font-black text-[var(--primary-text)]">Add Code Snippet</h2>
-          <button type="button" onClick={onClose} className="p-2 -mr-2"><X size={18} className="text-[var(--muted-text)] hover:text-[var(--primary-text)] transition-colors" /></button>
+          <button type="button" onClick={onClose} className="p-2 -mr-2 hover:bg-[var(--bg-silk)]/50 rounded-xl transition-all"><X size={18} className="text-[var(--muted-text)]" /></button>
         </div>
         <div className="space-y-4">
           <input
             value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             placeholder="Snippet title (e.g. Auth Middleware)"
-            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-bold outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)]"
+            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3.5 text-sm font-bold outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)]"
           />
           <select
             value={form.language} onChange={e => setForm(f => ({ ...f, language: e.target.value }))}
-            className="w-full bg-[var(--bg-silk)]/80 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-bold outline-none focus:border-[var(--accent-glow)]/50 text-[var(--primary-text)]"
+            className="w-full bg-[var(--bg-silk)]/80 border border-[var(--glass-border)] rounded-2xl px-4 py-3.5 text-sm font-bold outline-none focus:border-[var(--accent-glow)]/50 text-[var(--primary-text)]"
           >
             {Object.keys(LANG_COLORS).map(lang => (
               <option key={lang} value={lang} className="bg-[var(--bg-card)]">{lang.toUpperCase()}</option>
@@ -319,21 +323,19 @@ function AddSnippetModal({ onAdd, onClose, loading }) {
           <textarea
             value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))}
             placeholder="// Paste your critical logic here..."
-            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-3 text-sm font-mono outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)] resize-none h-48 md:h-64"
+            className="w-full bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] rounded-2xl px-4 py-4 text-sm font-mono outline-none focus:border-[var(--accent-glow)]/50 transition-all placeholder:text-[var(--muted-text)] text-[var(--primary-text)] resize-none h-48 md:h-64"
           />
           <button
             type="button"
             onClick={() => {
-              console.log('--- DEBUG: SNIPPET SAVE START ---');
-              console.log('Title:', form.title);
-              console.log('Language:', form.language);
-              console.log('Code Length:', form.code?.length);
+              console.log('--- NEURAL SYNC: SNIPPET SAVE TRIGGERED ---');
+              console.log('Parameters:', { ...form });
               onAdd(form);
             }}
             disabled={loading || !form.title || !form.code}
-            className="w-full py-4 rounded-2xl bg-[var(--brand-gradient)] text-white font-black text-xs uppercase tracking-widest disabled:opacity-50 shadow-lg relative z-[30] active:scale-95 transition-transform"
+            className="w-full py-4.5 rounded-[1.25rem] bg-[var(--brand-gradient)] text-white font-black text-xs uppercase tracking-widest disabled:opacity-50 shadow-lg relative z-[30] active:scale-[0.98] transition-all hover:shadow-[var(--accent-glow)]/20"
           >
-            {loading ? 'Encrypting...' : 'Add to Vault →'}
+            {loading ? 'Synchronizing...' : 'Add to Vault →'}
           </button>
         </div>
       </motion.div>
@@ -391,18 +393,18 @@ function Workspace({ team, userId, userName, socket, onLeave, onRefresh }) {
   };
 
   const addSnippet = async (form) => {
-    console.log('🚀 Triggering snippet save for Team:', team._id);
+    console.log('🚀 Initiating Snippet sync via POST /api/snippets');
     setSnipLoad(true);
     try {
-      const response = await api.post(`/teams/${team._id}/snippet`, form);
-      console.log('✅ Snippet Save Response:', response.data);
-      toast.success('Snippet added to vault!');
+      const response = await api.post('/snippets', { ...form, teamId: team._id });
+      console.log('✅ Snippet archived in neural vault:', response.data);
+      toast.success('Snippet synchronized successfully!');
       setShowSnip(false);
       onRefresh();
       setLogs(prev => [...prev, { type: 'SNIPPET_ADD', message: `"${form.title}" added to Code Vault.` }]);
     } catch (error) {
-      console.error('❌ Snippet Save Error:', error);
-      const errorMsg = error.response?.data?.message || error.message || 'Snippet synchronization failed';
+      console.error('❌ Snippet sync protocol failed:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Synchronization failure';
       toast.error(errorMsg);
     }
     finally { setSnipLoad(false); }

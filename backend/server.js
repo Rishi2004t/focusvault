@@ -44,6 +44,7 @@ import searchRoutes from './routes/search.js';
 import aiRoutes from './routes/ai.js';
 import soulRoutes from './routes/soul.js';
 import notificationRoutes from './routes/notifications.js';
+import snippetsRoutes from './routes/snippets.js';
 // Initialize Web Push with Neural Keys
 try {
   if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
@@ -173,6 +174,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/soul', soulRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/snippets', snippetsRoutes);
 
 // 404 Handler
 app.use((req, res) => {
