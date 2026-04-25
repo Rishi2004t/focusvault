@@ -23,6 +23,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ConfirmModal from '../components/ConfirmModal';
 import GlassCard from '../components/GlassCard';
 import NeonButton from '../components/NeonButton';
+import { useSocket } from '../context/SocketContext';
 import { format } from 'date-fns';
 
 export default function NotesPage() {
@@ -33,10 +34,25 @@ export default function NotesPage() {
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const navigate = useNavigate();
+  const socket = useSocket();
 
   useEffect(() => {
     fetchNotes();
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      const handleSync = (activity) => {
+        if (activity.type === 'NOTE_CREATE' || activity.type === 'VAULT_ADD') {
+          console.log('📡 Intelligence Sync: Refreshing notes...');
+          fetchNotes();
+        }
+      };
+
+      socket.on('new_activity', handleSync);
+      return () => socket.off('new_activity', handleSync);
+    }
+  }, [socket]);
 
   useEffect(() => {
     filterNotes();

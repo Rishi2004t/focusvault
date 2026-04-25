@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Bell, User, LogOut, Settings, Zap, ChevronDown, Clock, CheckCircle2, Database, FileText, Palette, Sparkles, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useSocket } from '../context/SocketContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import ThemePicker from './ThemePicker';
@@ -11,6 +12,7 @@ import ProductExperiencePanel from './ProductExperiencePanel';
 export default function Header({ onMenuClick }) {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
+  const socket = useSocket();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -39,6 +41,19 @@ export default function Header({ onMenuClick }) {
   useEffect(() => {
     if (user) fetchNotifs();
   }, [user]);
+
+  useEffect(() => {
+    if (socket) {
+      const handleNewNotif = (notif) => {
+        console.log('📡 Real-time notification received:', notif);
+        setNotifications(prev => [notif, ...prev]);
+        setUnreadCount(prev => prev + 1);
+      };
+
+      socket.on('new_notification', handleNewNotif);
+      return () => socket.off('new_notification', handleNewNotif);
+    }
+  }, [socket]);
 
   const markAllAsRead = async () => {
     try {

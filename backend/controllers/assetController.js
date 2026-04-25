@@ -3,7 +3,9 @@ import path from 'path';
 import { v2 as cloudinary } from 'cloudinary';
 import Asset from '../models/Asset.js';
 import Note from '../models/Note.js';
+import Notification from '../models/Notification.js';
 import { recordActivity } from '../utils/logger.js';
+import { getIO } from '../utils/socket.js';
 
 /**
  * Handle multiple file uploads and auto-create Neural Notes
@@ -99,6 +101,25 @@ export const uploadAssets = async (req, res) => {
         'neural', 
         { count: archivedAssets.length }
       );
+
+      // 5. Create System Notification for the feed
+      try {
+        const notification = await Notification.create({
+          userId: req.userId,
+          title: 'Neural Archival Complete',
+          message: summaryMsg + (newNote ? ' (Neural Note auto-created)' : ''),
+          type: 'SYSTEM_ALERT',
+          data: { url: '/files' }
+        });
+
+        // 6. Real-time Socket sync for Bell Icon
+        const io = getIO();
+        if (io) {
+          io.to(req.userId.toString()).emit('new_notification', notification);
+        }
+      } catch (notifErr) {
+        console.error('⚠️ Notification dispatch failure:', notifErr.message);
+      }
     }
 
     res.status(201).json({

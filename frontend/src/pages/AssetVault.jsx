@@ -51,9 +51,6 @@ const AssetVault = () => {
     try {
       const response = await api.get('/notes');
       setNotes(response.data);
-      if (response.data.length > 0) {
-        setSelectedNoteId(response.data[0]._id);
-      }
     } catch (error) {
       console.error('Error fetching notes');
     }
@@ -168,19 +165,20 @@ const AssetVault = () => {
 
           <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
              {/* Target Note Selector */}
-             <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Target Note:</span>
                 <select 
                   value={selectedNoteId}
                   onChange={(e) => setSelectedNoteId(e.target.value)}
                   className="bg-white/5 border border-white/5 vault-text text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl outline-none focus:border-[#8E8A7D]/30 transition-all cursor-pointer"
                 >
+                   <option value="">Auto-Create (Neural Note)</option>
                    {notes.map(n => (
                      <option key={n._id} value={n._id}>{n.title}</option>
                    ))}
-                   {notes.length === 0 && <option value="">No Notes Found</option>}
+                   {notes.length === 0 && <option value="" disabled>No Notes Found</option>}
                 </select>
-             </div>
+              </div>
 
              <button 
                onClick={() => fileInputRef.current?.click()}
