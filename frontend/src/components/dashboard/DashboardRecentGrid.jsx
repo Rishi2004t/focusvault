@@ -17,7 +17,6 @@ function RecentPanel({ title, icon, color, items = [], type, path }) {
   const navigate = useNavigate();
 
   return (
-  return (
     <div className="glass-card p-6 sm:p-8 flex flex-col h-full transition-all duration-500 hover:border-[var(--accent-glow)]/40 hover:-translate-y-1 hover:shadow-xl group/panel will-change-transform cursor-default">
       {/* Subtle Glow */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent-glow)]/5 blur-3xl group-hover/panel:bg-[var(--accent-glow)]/20 transition-colors duration-700 pointer-events-none" />

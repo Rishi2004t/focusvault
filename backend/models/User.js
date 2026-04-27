@@ -76,6 +76,8 @@ const userSchema = new mongoose.Schema(
       isSetup: { type: Boolean, default: false },
       color: { type: String },
       emoji: { type: String },
+      securityQuestion: { type: String },
+      securityAnswer: { type: String },
       failedAttempts: { type: Number, default: 0 },
       lockoutUntil: { type: Date },
     },

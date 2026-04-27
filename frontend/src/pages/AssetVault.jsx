@@ -60,6 +60,7 @@ const AssetVault = () => {
     try {
       setLoading(true);
       const response = await api.get('/upload/assets');
+      console.log('Fetched Vault Data:', response.data);
       setAssets(response.data);
     } catch (error) {
       console.error('Error fetching assets:', error);
@@ -92,8 +93,8 @@ const AssetVault = () => {
         }
       });
       toast.success(`${files.length} Neural Nodes successfully integrated`);
-      fetchAssets();
-      fetchNotes(); // Sync notes list as new ones were created
+      await fetchAssets();
+      await fetchNotes(); // Sync notes list as new ones were created
     } catch (error) {
       console.error('❌ Sync failure detected:', error);
       const errorMsg = error.response?.data?.message || error.parsedMessage || 'Sync failure detected during upload';
@@ -267,7 +268,11 @@ const AssetVault = () => {
         {/* Categorized Grid */}
         <div className="space-y-16">
           {categories.map(category => {
-            const categoryAssets = filteredAssets.filter(a => a.category === category);
+            const categoryAssets = filteredAssets.filter(a => {
+              const assetCategory = a.category || 'Other';
+              const normalizedCategory = filters.includes(assetCategory) ? assetCategory : 'Other';
+              return normalizedCategory === category;
+            });
             if (categoryAssets.length === 0) return null;
 
             return (

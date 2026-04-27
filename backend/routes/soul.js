@@ -2,6 +2,7 @@ import express from 'express';
 import User from '../models/User.js';
 import SoulEntry from '../models/SoulEntry.js';
 import { authMiddleware } from '../middleware/auth.js';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
@@ -24,14 +25,20 @@ router.get('/status', authMiddleware, async (req, res) => {
 // ── Setup MoodLock ──
 router.post('/setup', authMiddleware, async (req, res) => {
   try {
-    const { color, emoji } = req.body;
-    if (!color || !emoji) {
-      return res.status(400).json({ message: 'Color and Emoji are required' });
+    const { color, emoji, securityQuestion, securityAnswer } = req.body;
+    if (!color || !emoji || !securityQuestion || !securityAnswer) {
+      return res.status(400).json({ message: 'Color, Emoji, Security Question, and Answer are required' });
     }
 
     const user = await User.findById(req.userId);
+    
+    const salt = await bcrypt.genSalt(10);
+    const hashedAnswer = await bcrypt.hash(securityAnswer.toLowerCase().trim(), salt);
+
     user.moodLock.color = color;
     user.moodLock.emoji = emoji;
+    user.moodLock.securityQuestion = securityQuestion;
+    user.moodLock.securityAnswer = hashedAnswer;
     user.moodLock.isSetup = true;
     user.moodLock.failedAttempts = 0;
     user.moodLock.lockoutUntil = null;
@@ -86,6 +93,49 @@ router.post('/verify', authMiddleware, async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: 'Verification error', error: error.message });
+  }
+});
+
+// ── Get Security Question ──
+router.get('/question', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('moodLock.securityQuestion');
+    if (!user || !user.moodLock.securityQuestion) {
+      return res.status(404).json({ message: 'Security question not found' });
+    }
+    res.json({ question: user.moodLock.securityQuestion });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching question', error: error.message });
+  }
+});
+
+// ── Reset MoodLock ──
+router.post('/reset', authMiddleware, async (req, res) => {
+  try {
+    const { answer } = req.body;
+    if (!answer) {
+      return res.status(400).json({ message: 'Answer is required' });
+    }
+
+    const user = await User.findById(req.userId).select('moodLock');
+    if (!user || !user.moodLock.securityAnswer) {
+      return res.status(400).json({ message: 'No security answer configured' });
+    }
+
+    const isMatch = await bcrypt.compare(answer.toLowerCase().trim(), user.moodLock.securityAnswer);
+    if (isMatch) {
+      user.moodLock.isSetup = false;
+      user.moodLock.failedAttempts = 0;
+      user.moodLock.lockoutUntil = null;
+      user.moodLock.color = null;
+      user.moodLock.emoji = null;
+      await user.save();
+      res.json({ success: true, message: 'MoodLock reset successfully' });
+    } else {
+      res.status(401).json({ success: false, message: 'Incorrect answer' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Reset error', error: error.message });
   }
 });
 

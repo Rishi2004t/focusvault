@@ -45,7 +45,6 @@ export default function TodayFocus({ tasks = [], onToggle }) {
   };
 
   return (
-  return (
     <div className="glass-card p-6 sm:p-8 h-full group hover:shadow-[var(--accent-glow)]/10 transition-all duration-500 will-change-transform">
       {/* Background Accent */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--accent-glow)]/10 to-transparent blur-[80px] -mr-32 -mt-32 pointer-events-none transition-all duration-700 group-hover:from-[var(--accent-glow)]/20" />

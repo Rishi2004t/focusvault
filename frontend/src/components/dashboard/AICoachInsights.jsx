@@ -2,96 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, TrendingUp, Clock, Zap, ArrowRight, RefreshCw, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
 
-// ── Mock AI logic: generates smart insights based on simulated activity patterns ──
-const generateInsights = () => {
-  const hour = new Date().getHours();
-  const dayOfWeek = new Date().getDay();
-
-  const pool = [
-    {
-      id: 1,
-      icon: '🌅',
-      color: 'from-amber-400 to-orange-500',
-      glowColor: 'rgba(251,191,36,0.15)',
-      borderColor: 'rgba(251,191,36,0.2)',
-      badge: 'Peak Hours',
-      badgeColor: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-      title: 'You focus best in the morning',
-      detail: 'Your deep work sessions between 8–11 AM show 3× higher task completion.',
-      actionLabel: 'Schedule Focus Block',
-      actionPath: '/tasks',
-      confidence: 94,
-    },
-    {
-      id: 2,
-      icon: '⏱️',
-      color: 'from-violet-500 to-purple-600',
-      glowColor: 'rgba(139,92,246,0.15)',
-      borderColor: 'rgba(139,92,246,0.2)',
-      badge: 'Attention Span',
-      badgeColor: 'bg-violet-500/10 text-violet-600 border-violet-500/20',
-      title: 'You lose focus after 20 minutes',
-      detail: 'Switching to 20/5 Pomodoro cycles could improve your output by 40%.',
-      actionLabel: 'Start Focus Mode',
-      actionPath: '/focus',
-      confidence: 87,
-    },
-    {
-      id: 3,
-      icon: '📅',
-      color: 'from-emerald-400 to-teal-500',
-      glowColor: 'rgba(52,211,153,0.15)',
-      borderColor: 'rgba(52,211,153,0.2)',
-      badge: 'Weekly Pattern',
-      badgeColor: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-      title: 'Tuesdays are your most productive day',
-      detail: 'You complete 2.4× more tasks on Tuesdays. Front-load your week!',
-      actionLabel: 'View Analytics',
-      actionPath: '/analytics',
-      confidence: 91,
-    },
-    {
-      id: 4,
-      icon: '🔥',
-      color: 'from-rose-400 to-pink-500',
-      glowColor: 'rgba(251,113,133,0.15)',
-      borderColor: 'rgba(251,113,133,0.2)',
-      badge: 'Streak Boost',
-      badgeColor: 'bg-rose-500/10 text-rose-600 border-rose-500/20',
-      title: 'Your streak is at risk today',
-      detail: hour > 18
-        ? 'You haven\'t logged a session yet today. Quick 10-min sprint can save your streak!'
-        : 'Keep up the momentum — you\'re on track for a 7-day streak.',
-      actionLabel: 'Log Session',
-      actionPath: '/focus',
-      confidence: 99,
-    },
-    {
-      id: 5,
-      icon: '🧘',
-      color: 'from-sky-400 to-blue-500',
-      glowColor: 'rgba(56,189,248,0.15)',
-      borderColor: 'rgba(56,189,248,0.2)',
-      badge: 'Recovery',
-      badgeColor: 'bg-sky-500/10 text-sky-600 border-sky-500/20',
-      title: 'Take more breaks between sessions',
-      detail: 'Sessions with 5-min breaks show 28% better recall and fewer errors.',
-      actionLabel: 'Daily Replay',
-      actionPath: '/replay',
-      confidence: 82,
-    },
-  ];
-
-  // Smart selection: show 3 contextually relevant insights
-  const selected = [];
-  if (hour < 12) selected.push(pool[0]); // Morning tip
-  if (dayOfWeek === 2) selected.push(pool[2]); // Tuesday tip
-  selected.push(pool[1]); // Always show attention span
-  if (hour > 18 || selected.length < 3) selected.push(pool[3]);
-  if (selected.length < 3) selected.push(pool[4]);
-  return selected.slice(0, 3);
-};
+// ── AI logic: fetches smart insights from backend ──
 
 // ── Confidence Meter ──
 const ConfidenceMeter = ({ value, color }) => (
@@ -180,8 +93,16 @@ export default function AICoachInsights() {
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
-  const loadInsights = () => {
-    setInsights(generateInsights());
+  const loadInsights = async () => {
+    try {
+      const res = await api.get('/ai/coach');
+      if (res.data && res.data.insights) {
+        setInsights(res.data.insights);
+      }
+    } catch (error) {
+      console.error('Failed to load AI insights', error);
+      // Keep existing insights or show error state
+    }
     setLastUpdated(new Date());
   };
 
@@ -192,8 +113,7 @@ export default function AICoachInsights() {
   const handleRefresh = async () => {
     setRefreshing(true);
     setInsights([]);
-    await new Promise(r => setTimeout(r, 600));
-    loadInsights();
+    await loadInsights();
     setRefreshing(false);
   };
 
@@ -222,7 +142,7 @@ export default function AICoachInsights() {
               🧠 Focus AI Insights
             </h2>
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-              Updated {timeAgo()} · Mock Intelligence Engine
+              Updated {timeAgo()} · Live Neural Intelligence
             </p>
           </div>
         </div>
@@ -274,7 +194,7 @@ export default function AICoachInsights() {
       <div className="flex items-center gap-2 mt-6">
         <Lightbulb size={11} className="text-amber-400" />
         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-          Insights are generated from your session patterns · Real AI coming soon
+          Insights are generated dynamically from your recent tasks and activity by Focus AI.
         </p>
       </div>
     </section>
