@@ -119,14 +119,35 @@ const AssetVault = () => {
     }
   };
 
-  const handleDownload = (asset) => {
-    // Neural Proxy Download: Bypasses transformation blocks and CORS
-    // Using a direct GET link to the proxy endpoint with token for auth
-    const token = localStorage.getItem('authToken');
-    const downloadUrl = `${API_BASE_URL}/upload/download/${asset._id}?token=${token}`;
-    
-    // We open in a new window, the server responds with attachment headers, browser downloads it
-    window.open(downloadUrl, '_blank');
+  const handleDownload = async (asset) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const downloadUrl = `${API_BASE_URL}/upload/download/${asset._id}?token=${token}`;
+      
+      toast.info('Initializing neural retrieval...');
+      
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error('Neural retrieval failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', asset.filename);
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }, 100);
+      
+      toast.success('Archival node retrieved');
+    } catch (error) {
+      console.error('❌ Download failure:', error);
+      toast.error('Neural link disrupted: Download failed');
+    }
   };
 
   const filteredAssets = assets.filter(asset => {
@@ -466,16 +487,11 @@ const AssetVault = () => {
                    <div className="w-full h-full p-4 md:p-12">
                      <div className="w-full h-full rounded-[2rem] overflow-hidden shadow-inner border border-[#cccaae]/10 bg-white/50">
                         {previewAsset.fileType === 'pdf' ? (
-                          <object 
-                            data={`${previewAsset.url}#toolbar=0`} 
-                            type="application/pdf"
-                            className="w-full h-full border-none" 
-                          >
-                            <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-slate-900/5 text-center gap-4">
-                              <p className="text-sm font-bold text-[#8E8A7D]">Browser plugin required to view PDF inline.</p>
-                              <button onClick={() => handleDownload(previewAsset)} className="px-6 py-3 bg-white shadow-xl rounded-xl text-xs font-black uppercase text-black">Download PDF</button>
-                            </div>
-                          </object>
+                          <iframe 
+                            src={`${API_BASE_URL}/upload/download/${previewAsset._id}?token=${localStorage.getItem('authToken')}&preview=true`}
+                            className="w-full h-full border-none"
+                            title="Neural PDF Projection"
+                          />
                         ) : ['ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx'].includes(previewAsset.fileType) ? (
                           <iframe 
                             src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(previewAsset.url)}`}
