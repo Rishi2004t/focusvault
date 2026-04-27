@@ -24,6 +24,7 @@ import CreatorSection from '../components/dashboard/CreatorSection';
 import FocusHeatmap from '../components/dashboard/FocusHeatmap';
 import AICoachInsights from '../components/dashboard/AICoachInsights';
 import BadgesSection from '../components/dashboard/BadgesSection';
+import DailyAnalyticsReport from '../components/dashboard/DailyAnalyticsReport';
 
 import { 
   requestNotificationPermission, 
@@ -248,6 +249,11 @@ export default function Dashboard() {
 
             {/* ── Badges Section ── */}
             <BadgesSection allBadges={data?.allBadges} userBadges={user?.badges} />
+
+            {/* ── Daily Analytics Report ── */}
+            <div className="mt-12 sm:mt-16">
+              <DailyAnalyticsReport />
+            </div>
 
             <div className="bg-[var(--bg-silk)]/30 rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-10 border border-[var(--glass-border)] mt-16 sm:mt-24">
               <div className="flex items-center justify-between mb-10">
