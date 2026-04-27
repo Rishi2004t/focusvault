@@ -41,6 +41,7 @@ import analyticsRoutes from './routes/analytics.js';
 import teamsRoutes from './routes/teams.js';
 import systemRoutes from './routes/system.js';
 import codeRoutes from './routes/code.js';
+import activityRoutes from './routes/activity.js';
 import searchRoutes from './routes/search.js';
 import aiRoutes from './routes/ai.js';
 import soulRoutes from './routes/soul.js';
@@ -178,6 +179,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/soul', soulRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/snippets', snippetsRoutes);
+app.use('/api/activity', activityRoutes);
 
 // 404 Handler
 app.use((req, res) => {
