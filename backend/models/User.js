@@ -60,10 +60,12 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    badges: {
-      type: [String],
-      default: [],
-    },
+    badges: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Badge',
+      },
+    ],
     productivityLevel: {
       type: Number,
       default: 1,

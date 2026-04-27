@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { v2 as cloudinary } from 'cloudinary';
 import { authMiddleware } from '../middleware/auth.js';
 import Log from '../models/Log.js';
+import Badge from '../models/Badge.js';
 import { logToConsole } from '../utils/logger.js';
 
 const router = express.Router();
@@ -64,6 +65,17 @@ router.post('/clear-cache', authMiddleware, async (req, res) => {
     res.status(200).json({ message: 'System cache cleared and rebooted successfully' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to execute system reboot' });
+  }
+/**
+ * @desc Get all available badges
+ * @route GET /api/system/badges
+ */
+router.get('/badges', async (req, res) => {
+  try {
+    const badges = await Badge.find().sort({ minPoints: 1 });
+    res.json(badges);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching badges' });
   }
 });
 

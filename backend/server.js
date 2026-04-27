@@ -13,6 +13,7 @@ import webpush from 'web-push';
 import { initSocket } from './utils/socket.js';
 import { initCronJobs } from './utils/cron.js';
 import { authMiddleware } from './middleware/auth.js';
+import { seedBadges } from './utils/badgeSeeder.js';
 
 dotenv.config();
 
@@ -119,6 +120,8 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log('MongoDB connected');
     // Start Cron Jobs after successful DB connection
     initCronJobs();
+    // Seed default badges
+    seedBadges();
   })
   .catch((err) => console.error('MongoDB connection error:', err));
 

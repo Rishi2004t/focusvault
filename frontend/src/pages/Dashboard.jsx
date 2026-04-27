@@ -23,6 +23,7 @@ import FeedbackMarquee from '../components/dashboard/FeedbackMarquee';
 import CreatorSection from '../components/dashboard/CreatorSection';
 import FocusHeatmap from '../components/dashboard/FocusHeatmap';
 import AICoachInsights from '../components/dashboard/AICoachInsights';
+import BadgesSection from '../components/dashboard/BadgesSection';
 
 import { 
   requestNotificationPermission, 
@@ -54,6 +55,7 @@ export default function Dashboard() {
     insights: [],
     activityLogs: [],
     suggestions: [],
+    allBadges: [],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,6 +75,7 @@ export default function Dashboard() {
         api.get('/upload/assets?limit=5'),
         api.get('/tasks?sortBy=-priority'),
         api.get('/analytics/suggestions'),
+        api.get('/system/badges'),
       ]);
 
       setData({
@@ -85,6 +88,7 @@ export default function Dashboard() {
         insights: statsRes?.data?.insights || [],
         activityLogs: statsRes?.data?.activityLogs || [],
         suggestions: suggestionsRes?.data || [],
+        allBadges: badgesRes?.data || [],
       });
     } catch (err) {
       console.error('❌ Dashboard Sync Error:', err);
@@ -138,8 +142,29 @@ export default function Dashboard() {
         }));
         setLastSynced(new Date());
       };
+      const handleBadgeUnlocked = ({ badge, message }) => {
+        toast.success(message, {
+          icon: '🏆',
+          duration: 6000,
+          style: {
+            background: 'var(--bg-card)',
+            color: 'var(--primary-text)',
+            border: '1px solid var(--accent-glow)',
+            fontSize: '12px',
+            fontWeight: '900',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em'
+          }
+        });
+        if (fetchUserProfile) fetchUserProfile();
+      };
+
       socket.on('new_activity', handleNewActivity);
-      return () => socket.off('new_activity', handleNewActivity);
+      socket.on('badge_unlocked', handleBadgeUnlocked);
+      return () => {
+        socket.off('new_activity', handleNewActivity);
+        socket.off('badge_unlocked', handleBadgeUnlocked);
+      };
     }
   }, [socket]);
 
@@ -221,6 +246,9 @@ export default function Dashboard() {
               <DashboardRecentGrid notes={data?.recentNotes} assets={data?.recentAssets} tasks={data?.urgentTasks} />
             </div>
 
+            {/* ── Badges Section ── */}
+            <BadgesSection allBadges={data?.allBadges} userBadges={user?.badges} />
+
             <div className="bg-[var(--bg-silk)]/30 rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-10 border border-[var(--glass-border)] mt-16 sm:mt-24">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
@@ -279,7 +307,7 @@ export default function Dashboard() {
             {/* ── Version Tag for Verification ── */}
             <div className="fixed bottom-4 left-4 z-[50] pointer-events-none">
               <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-500/40 bg-indigo-500/5 px-3 py-1.5 rounded-full border border-indigo-500/10 backdrop-blur-sm">
-                Neural Build: 1.5.0-Mobile-Fix
+                Neural Build: 1.6.0-Badge-System
               </span>
             </div>
           </motion.div>

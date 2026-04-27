@@ -72,6 +72,8 @@ export const recordActivity = async (userId, type, message, category = 'system',
  */
 const syncUserXP = async (userId, activityType) => {
   const User = (await import('../models/User.js')).default;
+  const Badge = (await import('../models/Badge.js')).default;
+  
   let xpToAdd = 5; // Default
 
   switch (activityType) {
@@ -83,11 +85,41 @@ const syncUserXP = async (userId, activityType) => {
     case 'BREAK_SYNC': xpToAdd = 5; break;
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).populate('badges');
   if (user) {
+    const oldXP = user.xp;
     user.xp += xpToAdd;
     // Simple leveling: level up every 500 XP
     user.productivityLevel = Math.floor(user.xp / 500) + 1;
+    
+    // Badge Check Logic
+    const allBadges = await Badge.find({});
+    const newBadges = [];
+    
+    for (const badge of allBadges) {
+      const alreadyHas = user.badges.some(b => {
+        const id = b._id ? b._id.toString() : b.toString();
+        return id === badge._id.toString();
+      });
+      if (!alreadyHas && user.xp >= badge.minPoints) {
+        user.badges.push(badge._id);
+        newBadges.push(badge);
+      }
+    }
+    
     await user.save();
+
+    // Notify user of new badges
+    if (newBadges.length > 0) {
+      const io = getIO();
+      if (io) {
+        newBadges.forEach(badge => {
+          io.to(userId.toString()).emit('badge_unlocked', {
+            badge,
+            message: `🚨 Neural Achievement Unlocked: ${badge.name}`
+          });
+        });
+      }
+    }
   }
 };
