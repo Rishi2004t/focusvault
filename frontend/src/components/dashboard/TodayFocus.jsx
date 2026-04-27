@@ -54,7 +54,7 @@ export default function TodayFocus({ tasks = [], onToggle }) {
           <div className="w-10 h-10 rounded-xl bg-[var(--accent-glow)]/10 border border-[var(--accent-glow)]/20 flex items-center justify-center text-[var(--accent-glow)] group-hover:scale-110 transition-transform duration-500">
             <Target size={20} className="animate-pulse" />
           </div>
-          <div>
+          <div className="w-full sm:w-auto text-center sm:text-left">
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[var(--primary-text)] italic">Today's Mission</h3>
             <p className="text-[10px] font-bold text-[var(--muted-text)] uppercase tracking-widest mt-0.5">Keep pushing forward, Operative!</p>
           </div>

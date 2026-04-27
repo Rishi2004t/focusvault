@@ -216,7 +216,7 @@ export default function Dashboard() {
                 <div className="w-8 h-8 rounded-lg bg-[var(--bg-silk)] border border-[var(--glass-border)] flex items-center justify-center text-[var(--muted-text)]">
                   <BookOpen size={16} />
                 </div>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic">Archive Overviews</h3>
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic text-center sm:text-left w-full sm:w-auto">Archive Overviews</h3>
               </div>
               <DashboardRecentGrid notes={data?.recentNotes} assets={data?.recentAssets} tasks={data?.urgentTasks} />
             </div>
@@ -227,9 +227,9 @@ export default function Dashboard() {
                   <div className="w-9 h-9 rounded-xl bg-[var(--primary-text)] text-white flex items-center justify-center">
                     <Zap size={18} />
                   </div>
-                  <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic">Telemetry Analytics</h3>
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic text-center sm:text-left w-full sm:w-auto">Telemetry Analytics</h3>
                 </div>
-                <button className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent-glow)]">Export Intelligence</button>
+                <button className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent-glow)] hidden sm:block">Export Intelligence</button>
               </div>
               <DashboardStatsGrid stats={data?.stats} />
               <div className="mt-12">
@@ -242,7 +242,7 @@ export default function Dashboard() {
                   <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500">
                     <Sparkles size={16} />
                   </div>
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic">Neural Predictions</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary-text)] italic text-center sm:text-left w-full sm:w-auto">Neural Predictions</h3>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {data?.suggestions?.map((s, i) => (

@@ -28,12 +28,12 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
   }, []);
 
   return (
-    <div className="flex flex-col xl:flex-row items-start justify-between gap-8 mb-8 sm:mb-12">
+    <div className="flex flex-col xl:flex-row items-center xl:items-start justify-between gap-8 mb-8 sm:mb-12">
       <div className="flex-1 w-full">
         <motion.div
            initial={{ opacity: 0, y: -10 }}
            animate={{ opacity: 1, y: 0 }}
-           className="flex items-center gap-4 mb-4"
+           className="flex flex-wrap items-center justify-center xl:justify-start gap-4 mb-6"
         >
            <div className="px-3 py-1 bg-[var(--accent-glow)]/10 border border-[var(--glass-border)] backdrop-blur-sm rounded-full flex items-center gap-2 group cursor-pointer hover:bg-[var(--accent-glow)]/20 transition-all duration-300">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-glow)] animate-pulse shadow-[0_0_10px_var(--accent-glow)]" />
@@ -57,7 +57,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-2xl sm:text-4xl lg:text-5xl font-black text-[var(--primary-text)] tracking-tight italic"
+          className="text-2xl sm:text-4xl lg:text-5xl font-black text-[var(--primary-text)] tracking-tight italic text-center xl:text-left"
         >
           {greeting}, <span className="text-[var(--accent-glow)] opacity-90 drop-shadow-[0_0_20px_rgba(var(--accent-color-rgb),0.3)]">{user?.name || user?.username || 'Operative'}</span>
         </motion.h1>
@@ -67,7 +67,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -5 }}
-          className="text-sm font-bold text-[var(--muted-text)] mt-3 italic max-w-lg opacity-80"
+          className="text-sm font-bold text-[var(--muted-text)] mt-3 italic max-w-lg opacity-80 text-center xl:text-left mx-auto xl:mx-0"
         >
           {smartMessage}
         </motion.p>
@@ -77,7 +77,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
            initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
            transition={{ delay: 0.3 }}
-           className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+           className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center xl:justify-start gap-4"
         >
            <button 
              onClick={() => navigate('/focus')}
@@ -96,7 +96,7 @@ export default function DashboardHero({ user, stats, lastSynced, onRefresh }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-wrap gap-6 sm:gap-12 mt-10 group/stats"
+          className="flex flex-wrap items-center justify-center xl:justify-start gap-6 sm:gap-12 mt-10 group/stats"
         >
           <div className="flex flex-col hover:-translate-y-1 transition-transform duration-300">
             <span className="text-[9px] font-black text-[var(--muted-text)] uppercase tracking-[0.25em] mb-2 flex items-center gap-2 opacity-70">

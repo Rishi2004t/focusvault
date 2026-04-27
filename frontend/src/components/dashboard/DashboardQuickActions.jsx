@@ -72,7 +72,7 @@ export default function DashboardQuickActions({ onTestPulse }) {
         <div className="w-8 h-8 rounded-lg bg-[var(--accent-glow)]/10 border border-[var(--accent-glow)]/20 flex items-center justify-center text-[var(--accent-glow)] group hover:scale-110 transition-transform">
           <Terminal size={16} className="group-hover:animate-pulse" />
         </div>
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--primary-text)] italic">Command Center</h3>
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--primary-text)] italic text-center sm:text-left w-full sm:w-auto">Command Center</h3>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
