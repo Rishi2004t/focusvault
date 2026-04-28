@@ -68,17 +68,6 @@ router.post('/clear-cache', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * @desc Get all available badges
- * @route GET /api/system/badges
- */
-router.get('/badges', async (req, res) => {
-  try {
-    const badges = await Badge.find().sort({ minPoints: 1 });
-    res.json(badges);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching badges' });
-  }
 });
 
 export default router;

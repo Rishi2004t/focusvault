@@ -76,7 +76,7 @@ export default function Dashboard() {
         api.get('/upload/assets?limit=5'),
         api.get('/tasks?sortBy=-priority'),
         api.get('/analytics/suggestions'),
-        api.get('/system/badges'),
+        api.get('/analytics/badges'),
       ]);
 
       setData({

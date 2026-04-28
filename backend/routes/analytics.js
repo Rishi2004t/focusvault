@@ -7,6 +7,7 @@ import Note from '../models/Note.js';
 import Team from '../models/Team.js';
 import User from '../models/User.js';
 import Activity from '../models/Activity.js';
+import Badge from '../models/Badge.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { recordActivity } from '../utils/logger.js';
 
@@ -306,6 +307,19 @@ router.get('/suggestions', authMiddleware, async (req, res) => {
     res.json(uniqueSuggestions);
   } catch (err) {
     res.status(500).json({ message: 'Neural suggestion engine offline' });
+  }
+});
+
+/**
+ * GET /api/analytics/badges
+ * Get all available badges
+ */
+router.get('/badges', async (req, res) => {
+  try {
+    const badges = await Badge.find().sort({ minPoints: 1 });
+    res.json(badges);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching badges' });
   }
 });
 
