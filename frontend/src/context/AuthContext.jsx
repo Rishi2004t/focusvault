@@ -73,6 +73,9 @@ export const AuthProvider = ({ children }) => {
           setToken(token);
         }
       }
+      // ✅ Critical fix: clear the loading state so PrivateRoute
+      // stops showing the spinner immediately after login succeeds.
+      setLoading(false);
       return response.data;
     } catch (error) {
       console.error('Login rejection:', error);
