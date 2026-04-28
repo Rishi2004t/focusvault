@@ -68,7 +68,7 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [statsRes, velocityRes, distributionRes, notesRes, assetsRes, tasksRes, suggestionsRes] = await Promise.all([
+      const [statsRes, velocityRes, distributionRes, notesRes, assetsRes, tasksRes, suggestionsRes, badgesRes] = await Promise.all([
         api.get('/analytics/dashboard-stats'),
         api.get('/analytics/velocity'),
         api.get('/analytics/distribution'),
