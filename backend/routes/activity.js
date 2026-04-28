@@ -97,17 +97,6 @@ router.get('/today', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * GET /api/activity/all-badges
- * Get all available badges
- */
-router.get('/all-badges', async (req, res) => {
-  try {
-    const badges = await Badge.find().sort({ minPoints: 1 });
-    res.json(badges);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching badges' });
-  }
 });
 
 export default router;

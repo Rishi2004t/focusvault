@@ -16,6 +16,8 @@ import { authMiddleware } from './middleware/auth.js';
 import { seedBadges } from './utils/badgeSeeder.js';
 
 dotenv.config();
+// Neural Heartbeat: Forced Redeploy at 2026-04-28T09:39:00Z
+console.log('📡 [Neural Sync] System Heartbeat Active...');
 
 // 📡 Neural OAuth Startup Diagnostic
 console.log('📡 [Neural Sync] Environment Status Check...');

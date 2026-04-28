@@ -1,6 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import User from '../models/User.js';
+import Badge from '../models/Badge.js';
 import Subscription from '../models/Subscription.js';
 import { authMiddleware, generateToken } from '../middleware/auth.js';
 import { signup, login, forgotPassword, resetPassword } from '../controllers/authController.js';
@@ -160,6 +161,19 @@ router.post('/subscribe', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('❌ Subscription Failed:', error);
     res.status(500).json({ message: 'Neural Link Failure' });
+  }
+});
+
+/**
+ * GET /api/auth/badges-list
+ * Get all available badges
+ */
+router.get('/badges-list', async (req, res) => {
+  try {
+    const badges = await Badge.find().sort({ minPoints: 1 });
+    res.json(badges);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching badges' });
   }
 });
 
