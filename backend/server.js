@@ -88,6 +88,8 @@ app.options('*', cors());
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
   contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+  xFrameOptions: false,
 }));
 
 // Rate Limiting
