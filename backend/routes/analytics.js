@@ -13,6 +13,8 @@ import { recordActivity } from '../utils/logger.js';
 
 const router = express.Router();
 
+router.get('/health-check', (req, res) => res.json({ status: 'analytics online' }));
+
 /**
  * Utility: Calculate percentage change
  */
@@ -310,17 +312,6 @@ router.get('/suggestions', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * GET /api/analytics/badges
- * Get all available badges
- */
-router.get('/badges', async (req, res) => {
-  try {
-    const badges = await Badge.find().sort({ minPoints: 1 });
-    res.json(badges);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching badges' });
-  }
 });
 
 export default router;

@@ -4,6 +4,7 @@ import { authMiddleware } from '../middleware/auth.js';
 import Activity from '../models/Activity.js';
 import Task from '../models/Task.js';
 import User from '../models/User.js';
+import Badge from '../models/Badge.js';
 
 const router = express.Router();
 
@@ -93,6 +94,19 @@ router.get('/today', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('❌ Error fetching today activity:', error);
     res.status(500).json({ message: 'Error retrieving daily report' });
+  }
+});
+
+/**
+ * GET /api/activity/all-badges
+ * Get all available badges
+ */
+router.get('/all-badges', async (req, res) => {
+  try {
+    const badges = await Badge.find().sort({ minPoints: 1 });
+    res.json(badges);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching badges' });
   }
 });
 
