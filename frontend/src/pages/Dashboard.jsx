@@ -68,7 +68,7 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [statsRes, velocityRes, distributionRes, notesRes, assetsRes, tasksRes, suggestionsRes, badgesRes] = await Promise.all([
+      const [statsRes, velocityRes, distributionRes, notesRes, assetsRes, tasksRes, suggestionsRes] = await Promise.all([
         api.get('/analytics/dashboard-stats'),
         api.get('/analytics/velocity'),
         api.get('/analytics/distribution'),
@@ -76,8 +76,15 @@ export default function Dashboard() {
         api.get('/upload/assets?limit=5'),
         api.get('/tasks?sortBy=-priority'),
         api.get('/analytics/suggestions'),
-        api.get('/auth/badges-list'),
       ]);
+
+      let badgesData = [];
+      try {
+        const bRes = await api.get('/auth/badges-list');
+        badgesData = bRes?.data || [];
+      } catch (e) {
+        console.warn('⚠️ Neural Achievement Sync Failed. Dashboard remaining operational.');
+      }
 
       setData({
         stats: statsRes?.data?.metrics || {},
@@ -89,7 +96,7 @@ export default function Dashboard() {
         insights: statsRes?.data?.insights || [],
         activityLogs: statsRes?.data?.activityLogs || [],
         suggestions: suggestionsRes?.data || [],
-        allBadges: badgesRes?.data || [],
+        allBadges: badgesData,
       });
     } catch (err) {
       console.error('❌ Dashboard Sync Error:', err);
