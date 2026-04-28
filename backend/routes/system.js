@@ -66,6 +66,8 @@ router.post('/clear-cache', authMiddleware, async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Failed to execute system reboot' });
   }
+});
+
 /**
  * @desc Get all available badges
  * @route GET /api/system/badges
