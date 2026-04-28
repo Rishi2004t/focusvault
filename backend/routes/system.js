@@ -68,6 +68,5 @@ router.post('/clear-cache', authMiddleware, async (req, res) => {
   }
 });
 
-});
 
 export default router;

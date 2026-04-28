@@ -312,6 +312,5 @@ router.get('/suggestions', authMiddleware, async (req, res) => {
   }
 });
 
-});
 
 export default router;
