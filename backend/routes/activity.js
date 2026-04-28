@@ -97,6 +97,6 @@ router.get('/today', authMiddleware, async (req, res) => {
   }
 });
 
-});
+
 
 export default router;
