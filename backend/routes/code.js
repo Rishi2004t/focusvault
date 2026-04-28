@@ -37,42 +37,35 @@ router.post('/run', authMiddleware, async (req, res) => {
   const { language, files, stdin } = req.body;
   const code = files?.[0]?.content || '';
 
-  // ── Wandbox compiler map (all confirmed working) ──────────────────────────
-  const wandboxMap = {
-    python:     { compiler: 'cpython-3.12.0',  lang: 'Python 3.12'  },
-    cpp:        { compiler: 'gcc-head',         lang: 'GCC (C++)'    },
-    java:       { compiler: 'openjdk-head',     lang: 'OpenJDK'      },
-    javascript: { compiler: 'nodejs-head',      lang: 'Node.js'      },
-    typescript: { compiler: 'typescript-5.0.4', lang: 'TypeScript'   },
-    c:          { compiler: 'gcc-head-c',       lang: 'GCC (C)'      },
-  };
+  // ── Primary: Piston API (Highly Stable) ──────────────────────────────────────────────────────
+  try {
+    console.log(`🌐 Executing via Piston API: ${language}`);
+    
+    // Map 'c' to 'c' and 'cpp' to 'c++' if needed, piston accepts 'c' and 'c++'
+    let pistonLang = language;
+    if (language === 'cpp') pistonLang = 'c++';
 
-  const wb = wandboxMap[language];
+    const response = await axios.post('https://emkc.org/api/v2/piston/execute', {
+      language: pistonLang,
+      version: '*',
+      files: [{ content: code }],
+      stdin: stdin || ''
+    }, { timeout: 20000 });
 
-  // ── Primary: Wandbox ──────────────────────────────────────────────────────
-  if (wb) {
-    try {
-      console.log(`🌐 Executing via Wandbox: ${wb.lang}`);
-      const response = await axios.post('https://wandbox.org/api/compile.json', {
-        code,
-        compiler: wb.compiler,
-        stdin: stdin || '',
-        options: '',
-      }, { timeout: 20000 });
-
-      const d = response.data;
+    const d = response.data;
+    if (d && d.run) {
       return res.json({
         run: {
-          stdout: d.program_output || d.compiler_output || '',
-          stderr: d.program_error  || d.compiler_error  || '',
-          code:   parseInt(d.status ?? '0', 10),
+          stdout: d.run.stdout || '',
+          stderr: d.run.stderr || '',
+          code: d.run.code,
           source: 'cloud'
         },
-        statusMessage: `Executed via Wandbox — ${wb.lang}`
+        statusMessage: `Executed via Piston Engine — ${d.language} ${d.version}`
       });
-    } catch (err) {
-      console.warn('⚠️ Wandbox failed:', err.message);
     }
+  } catch (err) {
+    console.warn('⚠️ Piston API failed:', err.message);
   }
 
   // ── Fallback: Local simulation (Python / JavaScript simple patterns) ──────

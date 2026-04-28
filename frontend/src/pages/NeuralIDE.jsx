@@ -135,30 +135,22 @@ export default function NeuralIDE() {
     };
   };
 
-  // ── Wandbox browser call (CONFIRMED reachable) ──────────────────────────
-  const runViaWandbox = async (lang, src, stdin) => {
-    const compilerMap = {
-      python:     'cpython-3.12.0',
-      cpp:        'gcc-head',
-      java:       'openjdk-head',
-      javascript: 'nodejs-head',
-      typescript: 'typescript-5.0.4',
-      c:          'gcc-head-c',
-    };
-    const compiler = compilerMap[lang];
-    if (!compiler) throw new Error(`Wandbox does not support ${lang}`);
+  // ── Piston API browser call (Stable & Reliable) ──────────────────────────
+  const runViaPiston = async (lang, src, stdin) => {
+    let pistonLang = lang;
+    if (lang === 'cpp') pistonLang = 'c++';
 
-    const resp = await fetch('https://wandbox.org/api/compile.json', {
+    const resp = await fetch('https://emkc.org/api/v2/piston/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: src, compiler, stdin: stdin || '', options: '' })
+      body: JSON.stringify({ language: pistonLang, version: '*', files: [{ content: src }], stdin: stdin || '' })
     });
-    if (!resp.ok) throw new Error(`Wandbox responded ${resp.status}`);
+    if (!resp.ok) throw new Error(`Piston API responded ${resp.status}`);
     const data = await resp.json();
     return {
-      stdout: data.program_output || data.compiler_output || '',
-      stderr: data.program_error  || data.compiler_error  || '',
-      code:   parseInt(data.status ?? '0', 10),
+      stdout: data.run.stdout || '',
+      stderr: data.run.stderr || '',
+      code:   data.run.code,
       source: 'cloud'
     };
   };
@@ -224,15 +216,15 @@ export default function NeuralIDE() {
       addLog('status', '⚙️ Primary Engine Down. Switched to Backup.');
     }  // ← end of catch (backendErr)
 
-    // ── Tier 2a: Wandbox (Confirmed Working) ─────────────────────────────────
+    // ── Tier 2a: Piston API (Stable Fallback) ─────────────────────────────────
     if (['python', 'cpp', 'java', 'javascript', 'typescript', 'c'].includes(language)) {
-      addLog('status', '⚙️ Trying Wandbox engine...');
+      addLog('status', '⚙️ Trying Piston engine...');
       try {
-        const run = await runViaWandbox(language, code, customInput);
+        const run = await runViaPiston(language, code, customInput);
         setIsRunning(false);
         return displayResult(run, 'cloud');
-      } catch (wandboxErr) {
-        addLog('status', `⚠️ Wandbox unavailable — ${wandboxErr.message}. Trying next engine...`);
+      } catch (pistonErr) {
+        addLog('status', `⚠️ Piston unavailable — ${pistonErr.message}. Trying next engine...`);
       }
     }
 
