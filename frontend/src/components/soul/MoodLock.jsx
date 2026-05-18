@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, ShieldAlert, Eye, EyeOff, KeyRound, ArrowLeft, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Lock, ShieldAlert, Eye, EyeOff, KeyRound, ArrowLeft, CheckCircle2, AlertTriangle } from 'lucide-react';
 import api from '../../utils/api';
 import { toast } from 'react-hot-toast';
 
@@ -72,6 +72,7 @@ export default function MoodLock({ isSetup, onUnlock }) {
   const [forgotMode, setForgotMode] = useState(false);
   const [forgotStep, setForgotStep] = useState(STEP_ANSWER);
   const [fetchedQuestion, setFetchedQuestion] = useState('');
+  const [noQuestion, setNoQuestion] = useState(false); // true when no security question is on file
   const [answerInput, setAnswerInput] = useState('');
   const [newPw, setNewPw] = useState('');
 
@@ -131,10 +132,13 @@ export default function MoodLock({ isSetup, onUnlock }) {
     try {
       const { data } = await api.get('/soul/question');
       setFetchedQuestion(data.question);
+      setNoQuestion(false);
       setForgotMode(true);
       setForgotStep(STEP_ANSWER);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'No security question found. Contact support.');
+      // No security question on file — show the recovery helper UI
+      setNoQuestion(true);
+      setForgotMode(true);
     } finally {
       setLoading(false);
     }
@@ -182,6 +186,7 @@ export default function MoodLock({ isSetup, onUnlock }) {
     setForgotStep(STEP_ANSWER);
     setAnswerInput('');
     setNewPw('');
+    setNoQuestion(false);
   };
 
   // ════════════════════════════════════════
@@ -201,102 +206,129 @@ export default function MoodLock({ isSetup, onUnlock }) {
           <div>
             <h2 className="text-lg font-black text-[var(--primary-text)] tracking-tight">Forgot Password</h2>
             <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted-text)]">
-              {forgotStep === STEP_ANSWER ? 'Step 1 of 2 · Verify Identity' : 'Step 2 of 2 · Set New Password'}
+              {noQuestion ? 'No Recovery Method Found' : forgotStep === STEP_ANSWER ? 'Step 1 of 2 · Verify Identity' : 'Step 2 of 2 · Set New Password'}
             </p>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="w-full h-1 rounded-full bg-[var(--glass-border)] mb-7 overflow-hidden">
-          <motion.div
-            className="h-full bg-purple-500 rounded-full"
-            animate={{ width: forgotStep === STEP_ANSWER ? '50%' : '100%' }}
-            transition={{ duration: 0.4 }}
-          />
-        </div>
-
-        <AnimatePresence mode="wait">
-          {/* ── Step 1: Answer ── */}
-          {forgotStep === STEP_ANSWER && (
-            <motion.div
-              key="answer-step"
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -24 }}
-              className="space-y-5"
-            >
-              {/* Security question display */}
-              <div className="p-4 rounded-2xl bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20">
-                <p className="text-[10px] font-black uppercase tracking-widest text-purple-500 mb-1.5">
-                  Security Question
-                </p>
-                <p className="text-sm font-semibold text-[var(--primary-text)] italic leading-relaxed">
-                  {fetchedQuestion}
-                </p>
-              </div>
-
+        {/* ── No security question on file ── */}
+        {noQuestion && (
+          <div className="space-y-5">
+            <div className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-center">
+              <AlertTriangle size={28} className="text-amber-500" />
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted-text)] block mb-2">
-                  Your Answer
-                </label>
-                <input
-                  type="text"
-                  placeholder="Type your answer..."
-                  value={answerInput}
-                  onChange={e => setAnswerInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleVerifyAnswer()}
-                  autoFocus
-                  className="w-full px-4 py-3 rounded-xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] outline-none focus:border-purple-400 transition-colors text-sm font-bold text-[var(--primary-text)]"
-                />
-                <p className="text-[10px] text-[var(--muted-text)] mt-1.5 ml-1">Answer is case-insensitive</p>
-              </div>
-
-              <button
-                onClick={handleVerifyAnswer}
-                disabled={loading || !answerInput.trim()}
-                className="w-full py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-purple-500 text-white shadow-lg hover:bg-purple-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Verifying...' : 'Verify Answer →'}
-              </button>
-            </motion.div>
-          )}
-
-          {/* ── Step 2: New Password ── */}
-          {forgotStep === STEP_NEW_PW && (
-            <motion.div
-              key="newpw-step"
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -24 }}
-              className="space-y-5"
-            >
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
-                <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
-                <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                  Identity verified! Set your new Soul Vault password.
+                <p className="text-sm font-black text-amber-700 dark:text-amber-400">No recovery question on file</p>
+                <p className="text-xs text-amber-600 dark:text-amber-500 mt-1 leading-relaxed">
+                  Your account has no security question configured. You'll need to set up a fresh Soul Vault password.
                 </p>
               </div>
+            </div>
+            <button
+              onClick={cancelForgot}
+              className="w-full py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-[var(--primary-text)] text-white shadow-lg transition-all"
+            >
+              Set Up Fresh Vault
+            </button>
+            <p className="text-center text-[10px] text-[var(--muted-text)] leading-relaxed">
+              This will prompt you to create a new password and recovery question.
+            </p>
+          </div>
+        )}
 
-              <PasswordField
-                label="New Password"
-                placeholder="Enter new password..."
-                value={newPw}
-                onChange={e => setNewPw(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleResetPassword()}
-                autoFocus
-                focusColor="emerald"
+        {/* Progress bar + steps — only when a security question exists */}
+        {!noQuestion && (
+          <>
+            <div className="w-full h-1 rounded-full bg-[var(--glass-border)] mb-7 overflow-hidden">
+              <motion.div
+                className="h-full bg-purple-500 rounded-full"
+                animate={{ width: forgotStep === STEP_ANSWER ? '50%' : '100%' }}
+                transition={{ duration: 0.4 }}
               />
+            </div>
 
-              <button
-                onClick={handleResetPassword}
-                disabled={loading || !newPw}
-                className="w-full py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-[var(--primary-text)] text-white shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Resetting...' : 'Reset Password 🔐'}
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <AnimatePresence mode="wait">
+              {/* ── Step 1: Answer ── */}
+              {forgotStep === STEP_ANSWER && (
+                <motion.div
+                  key="answer-step"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  className="space-y-5"
+                >
+                  <div className="p-4 rounded-2xl bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-purple-500 mb-1.5">
+                      Security Question
+                    </p>
+                    <p className="text-sm font-semibold text-[var(--primary-text)] italic leading-relaxed">
+                      {fetchedQuestion}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--muted-text)] block mb-2">
+                      Your Answer
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Type your answer..."
+                      value={answerInput}
+                      onChange={e => setAnswerInput(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleVerifyAnswer()}
+                      autoFocus
+                      className="w-full px-4 py-3 rounded-xl bg-[var(--bg-silk)]/50 border border-[var(--glass-border)] outline-none focus:border-purple-400 transition-colors text-sm font-bold text-[var(--primary-text)]"
+                    />
+                    <p className="text-[10px] text-[var(--muted-text)] mt-1.5 ml-1">Answer is case-insensitive</p>
+                  </div>
+
+                  <button
+                    onClick={handleVerifyAnswer}
+                    disabled={loading || !answerInput.trim()}
+                    className="w-full py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-purple-500 text-white shadow-lg hover:bg-purple-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Verifying...' : 'Verify Answer →'}
+                  </button>
+                </motion.div>
+              )}
+
+              {/* ── Step 2: New Password ── */}
+              {forgotStep === STEP_NEW_PW && (
+                <motion.div
+                  key="newpw-step"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  className="space-y-5"
+                >
+                  <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
+                    <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                    <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                      Identity verified! Set your new Soul Vault password.
+                    </p>
+                  </div>
+
+                  <PasswordField
+                    label="New Password"
+                    placeholder="Enter new password..."
+                    value={newPw}
+                    onChange={e => setNewPw(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleResetPassword()}
+                    autoFocus
+                    focusColor="emerald"
+                  />
+
+                  <button
+                    onClick={handleResetPassword}
+                    disabled={loading || !newPw}
+                    className="w-full py-4 rounded-xl text-xs font-black uppercase tracking-widest bg-[var(--primary-text)] text-white shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Resetting...' : 'Reset Password 🔐'}
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
       </Card>
     );
   }

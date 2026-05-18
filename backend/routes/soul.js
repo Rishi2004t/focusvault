@@ -7,24 +7,20 @@ import bcrypt from 'bcryptjs';
 const router = express.Router();
 
 // ── Status ──
-// Checks if Soul Vault is set up (password-based takes priority over legacy moodLock)
+// Only shows isSetup:true (unlock mode) when soulVault.password actually exists.
+// Old moodLock-only accounts are forced into setup mode to migrate to password-based vault.
 router.get('/status', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select('moodLock soulVault');
+    const user = await User.findById(req.userId).select('soulVault');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // New password-based system takes priority
     if (user.soulVault?.password) {
+      // Password-based vault is fully set up → show unlock screen
       return res.json({ isSetup: true, isLocked: true, authType: 'password' });
     }
 
-    // Legacy moodLock fallback
-    res.json({
-      isSetup: user.moodLock?.isSetup || false,
-      isLocked: user.moodLock?.isSetup || false,
-      lockoutUntil: user.moodLock?.lockoutUntil,
-      authType: 'moodlock',
-    });
+    // No password yet → force setup screen (covers new users AND old moodLock users)
+    res.json({ isSetup: false, isLocked: false, authType: 'none' });
   } catch (error) {
     res.status(500).json({ message: 'Error checking status', error: error.message });
   }
